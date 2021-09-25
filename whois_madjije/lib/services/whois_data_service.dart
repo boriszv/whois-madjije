@@ -8,11 +8,31 @@ class WhoisDataService implements IWhoisDataService {
   WhoisDataService(this.api);
 
   @override
-  Future<List<DomainAvailability>> getAvailabilityList(String domain) {
-    // TODO: implement getAvailabilityList
-    throw UnimplementedError();
+  Stream<List<DomainAvailability>> getAvailabilityList(String domain) async* {
+    const domains = [
+      '.rs',
+      '.срб',
+      '.ru',
+      '.рф',
+      '.mk',
+      '.мкд',
+      '.org',
+      '.орг',
+      '.com',
+      '.ком',
+      '.net',
+      '.uk',
+      '.se',
+    ];
+
+    final list = <DomainAvailability>[];
+    for (final domainName in domains) {
+      final result = await getWhoisData(domain + domainName);
+      list.add(DomainAvailability(domainName: domainName, isRegistered: result.exists));
+      yield list;
+    }
   }
-  
+
   @override
   Future<WhoisData> getWhoisData(String domain) async {
     final result = await api.getWhoisData(domain);

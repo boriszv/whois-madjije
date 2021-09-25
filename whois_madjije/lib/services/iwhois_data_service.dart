@@ -80,5 +80,5 @@ abstract class IWhoisDataService {
   Future<WhoisData> getWhoisData(String domain);
 
   // Get availability list of domains
-  Future<List<DomainAvailability>> getAvailabilityList(String domain);
+  Stream<List<DomainAvailability>> getAvailabilityList(String domain);
 }
