@@ -41,24 +41,40 @@ class _HomeState extends State<Home> {
       body: WillPopScope(
         onWillPop: null,
         child: Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-            selectedFontSize: 13,
-            unselectedFontSize: 13,
-            currentIndex: _index,
-            onTap: setPageIndex,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.yellow,
-            unselectedItemColor: Colors.grey.shade400,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite), label: 'Favorite'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.history), label: 'History'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: 'Settings'),
-            ],
-            backgroundColor: Colors.white,
+          bottomNavigationBar: Container(
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: BottomNavigationBar(
+              elevation: 0,
+              selectedFontSize: 13,
+              unselectedFontSize: 13,
+              currentIndex: _index,
+              onTap: setPageIndex,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Theme.of(context).primaryColor,
+              unselectedItemColor: Colors.grey.shade400,
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.home, size: 30),
+                  label: translations.translate('Pocetna'),
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.star, size: 30),
+                  label: translations.translate('Omiljeno'),
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.history, size: 30),
+                  label: translations.translate('Istorija'),
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.settings, size: 30),
+                  label: translations.translate('Podesavanja'),
+                ),
+              ],
+              backgroundColor: Colors.white,
+            ),
           ),
           body: IndexedStack(
             children: <Widget>[
@@ -68,7 +84,7 @@ class _HomeState extends State<Home> {
                   return MaterialPageRoute(
                     settings: settings,
                     builder: (BuildContext context) {
-                      return HomeView();
+                      return const HomeView();
                     },
                   );
                 },

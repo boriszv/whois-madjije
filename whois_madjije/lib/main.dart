@@ -17,7 +17,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
       
       localizationsDelegates: const [
@@ -39,7 +39,7 @@ class App extends StatelessWidget {
 
         return supportedLocales.first;
       },
-      home: Home(),
+      home: const Home(),
     );
   }
 }

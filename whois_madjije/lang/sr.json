@@ -1,3 +1,8 @@
 {
-    "test": "Latinica"
+    "Latinica": "Latinica",
+    "Cirilica": "Ћирилица",
+    "Pocetna": "Početna",
+    "Omiljeno": "Omiljeno",
+    "Istorija": "Istorija",
+    "Podesavanja": "Podešavanja"
 }
