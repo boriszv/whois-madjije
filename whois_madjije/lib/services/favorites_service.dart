@@ -70,6 +70,7 @@ class FavoritesService implements IFavoritesService {
       .map((x) => Favorite(
         domainName: x['domainName'],
         dateTime: DateTime.parse(x['dateTime']),
+        registered: x['registered'],
       ))
       .toList();
   }

@@ -66,7 +66,8 @@ class _DomainDetailState extends State<DomainDetail> {
     } else {
       await favoritesService.addFavorite(Favorite(
         dateTime: DateTime.now(),
-        domainName: widget.domain
+        domainName: widget.domain,
+        registered: data?.exists ?? false,
       ));
       message = 'Dodato u omiljene';
     }

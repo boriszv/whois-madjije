@@ -1,10 +1,13 @@
 class Favorite {
   String domainName;
   DateTime dateTime;
+  bool registered;
 
   Favorite({
     required this.domainName,
-    required this.dateTime});
+    required this.dateTime,
+    required this.registered,
+  });
 
   bool isEmpty() => domainName == '!empty!';
 
@@ -12,6 +15,7 @@ class Favorite {
     return Favorite(
       dateTime: DateTime.now(),
       domainName: '!empty!',
+      registered: false,
     );
   }
 
@@ -19,6 +23,7 @@ class Favorite {
     return {
       'domainName': domainName,
       'dateTime': dateTime.toIso8601String(),
+      'registered': registered
     };
   }
 }
