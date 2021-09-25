@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../app_localizations.dart';
+import 'home_textbox.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -8,6 +8,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
+    final controller = TextEditingController();
 
     return Scaffold(
       body: Container(
@@ -36,53 +37,10 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 50),
 
               // TEXTFIELD
-              Material(
-                elevation: 5.0,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.only(
-                            left: 25, bottom: 25, top: 25),
-                        hintText: translations.translate('Unesite ime domena'),
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: ElevatedButton(
-                        onPressed: () => {},
-                        child: const Icon(
-                          Icons.chevron_right,
-                          color: Colors.white,
-                        ),
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                bottomRight: Radius.circular(8),
-                              ),
-                            ),
-                          ),
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.only(bottom: 25, top: 20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              HomeTextbox(
+                controller: controller,
               ),
+
               const SizedBox(height: 50),
               SizedBox(
                 height: 50,
@@ -98,24 +56,7 @@ class HomeView extends StatelessWidget {
                       Text(translations.translate('Pretrazi'))
                     ],
                   ),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      foregroundColor: MaterialStateProperty.all(
-                        Colors.white,
-                      ),
-                      backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).primaryColor,
-                      ),
-                      textStyle: MaterialStateProperty.all(
-                        const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      )),
+                  style: _searchButtonStyle(context),
                 ),
               ),
             ],
@@ -123,5 +64,26 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ButtonStyle _searchButtonStyle(BuildContext context) {
+    return ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        foregroundColor: MaterialStateProperty.all(
+          Colors.white,
+        ),
+        backgroundColor: MaterialStateProperty.all(
+          Theme.of(context).primaryColor,
+        ),
+        textStyle: MaterialStateProperty.all(
+          const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ));
   }
 }
