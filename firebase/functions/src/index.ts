@@ -1,7 +1,9 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { QueryDocumentSnapshot } from "firebase-functions/v1/firestore";
+// import { QueryDocumentSnapshot } from "firebase-functions/v1/firestore";
 import { EventContext } from "firebase-functions";
+import * as sendgrid from '@sendgrid/mail';
+import { MailDataRequired } from "@sendgrid/mail";
 
 admin.initializeApp();
 
@@ -14,9 +16,12 @@ interface Notification {
   domain: string;
   expirationDateTime: string;
   status?: 'queued' | 'failed' | 'success' | 'cancelled';
+  email?: string;
 }
 
 const deviceToken = 'cc6Qo3nzS96lG8oKu3w3ly:APA91bHjGupbyL-fYGEGbqWmRNj5y0zsCMAPXj9MT1jkc8BR3V-YI7A_Uku77JUMdt8qqeWHi2VDKx7imSdVN-mfgvCmFu6zCFY0clsfEOh7tftkNgp0LUcVb391PflwBVAXCK8UHa3g';
+const email = 'boriszivk@gmail.com'
+const email2 = 'lukastajcic@gmail.com'
 
 const dataToSeed: Notification[] = [
   {
@@ -33,6 +38,20 @@ const dataToSeed: Notification[] = [
     expirationDateTime: new Date().toISOString(),
     status: 'queued'
   },
+  {
+    type: 'email',
+    email: email,
+    domain: 'prioritysoft.rs',
+    expirationDateTime: new Date().toISOString(),
+    status: 'queued'
+  },
+  {
+    type: 'email',
+    email: email2,
+    domain: 'prioritysoft.io',
+    expirationDateTime: new Date().toISOString(),
+    status: 'queued'
+  },
 ];
 
 export const seedData = functions.https.onRequest(async (req, res) => {
@@ -43,7 +62,12 @@ export const seedData = functions.https.onRequest(async (req, res) => {
   res.send(200);
 });
 
-const sendNotifications = async (context: EventContext) => {
+export const sendNotificationsApi = functions.https.onRequest(async (req, res) => {
+  await sendNotifications();
+  res.send(200);
+});
+
+const sendNotifications = async (context?: EventContext) => {
   // .onRequest(async (req, res) => {
   try {
     const baseQuery = firestore.collection('notifications')
@@ -68,12 +92,28 @@ const sendNotifications = async (context: EventContext) => {
     const pushNotificationsToSend = [];
     const pushNotificationDocumentsToUpdate = [];
 
+    const emailNotificationsToSend: MailDataRequired[] = [];
+    const emailNotificationDocumentsToUpdate = [];
+
     for (const notificationDoc of notificationsToSend) {
       const notification = notificationDoc.data() as Notification;
 
       switch (notification.type) {
         case 'email':
-          await sendEmailNotification(notificationDoc);
+          if (!notification.email)
+            continue;
+
+          emailNotificationsToSend.push({
+            to: notification.email,
+            from: 'whois-madjije@prioritysoft.io',
+            subject: `Upozorenje: domen ${notification.domain} je istekao`,
+            text: 'ripcic',
+            html: '<strong>ripcic</strong>',
+
+          } as MailDataRequired);
+
+          emailNotificationDocumentsToUpdate.push(notificationDoc);
+
           break;
 
         case 'push':
@@ -102,6 +142,14 @@ const sendNotifications = async (context: EventContext) => {
       }
     }
 
+    if (emailNotificationsToSend.length > 0) {
+      sendgrid.setApiKey('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');
+      await sendgrid.send(emailNotificationsToSend, true);
+
+      for (const notification of emailNotificationDocumentsToUpdate) {
+        await notification.ref.set({ 'status': 'success' }, { merge: true });
+      }
+    }
     // res.send(200);
   } catch (e) {
     console.log(e);
@@ -131,7 +179,3 @@ const constructPushNotification = (data: Notification) => {
     },
   }
 }
-
-const sendEmailNotification = async (notification: QueryDocumentSnapshot) => {
-
-};
