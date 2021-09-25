@@ -10,6 +10,7 @@ class DomainAvailability {
 class WhoisData {
 
   final bool exists;
+  final bool valid;
 
   final String? domainName;
 
@@ -44,6 +45,7 @@ class WhoisData {
 
   WhoisData({
     required this.exists,
+    required this.valid,
     this.domainName,
     this.createdDate,
     this.updatedDate,
@@ -69,6 +71,7 @@ class WhoisData {
 
   factory WhoisData.missingData() {
     return WhoisData(
+      valid: false,
       exists: false,
     );
   }

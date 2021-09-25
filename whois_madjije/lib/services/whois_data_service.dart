@@ -41,14 +41,30 @@ class WhoisDataService implements IWhoisDataService {
 
     final record = result['WhoisRecord'];
 
+    if (result['ErrorMessage'] != null) {
+      return WhoisData(
+        exists: false,
+        valid: false,
+      );
+    }
+
     if (record['dataError'] == 'MISSING_WHOIS_DATA') {
       await _addSearchRecod(domain, false);
 
       return WhoisData.missingData();
     }
 
+    if (record['registryData']?['rawText']?.toLowerCase()?.contains('invalid') == true) {
+      return WhoisData(
+        exists: false,
+        valid: false,
+      );
+    }
+
     final data = WhoisData(
       exists: true,
+      valid: true,
+
       domainName: record['domainName'],
 
       createdDate: record['registryData']['createdDate'],

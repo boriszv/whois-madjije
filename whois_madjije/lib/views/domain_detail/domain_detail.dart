@@ -46,13 +46,13 @@ class _DomainDetailState extends State<DomainDetail> {
     Future.wait([
       notificationsService.getNotification(widget.domain),
       favoritesService.getFavorite(widget.domain),
-      // whoisDataService.getWhoisData(widget.domain),  
+      whoisDataService.getWhoisData(widget.domain),  
 
     ]).then((results) {
       hasNotification = results[0] != null;
       isInFavorites = results[1] != null;
       
-      // setState(() { data = results[2] as WhoisData; });
+      setState(() { data = results[2] as WhoisData; });
     });
   }
 
@@ -77,17 +77,24 @@ class _DomainDetailState extends State<DomainDetail> {
   Future<void> _notificationClicked() async {
     String message;
 
-    if (isInFavorites) {
+    if (hasNotification) {
       await notificationsService.cancelNotification(widget.domain);
       message = 'Podsetnik je otkazan';
 
     } else {
       final notificationSettings = await settingsService.getNotificationSettings();
 
+      var dateTime = DateTime.tryParse(data?.expiresDate ?? '');
+      dateTime ??= await _showDatePicker();
+
+      if (dateTime == null) {
+        return;
+      }
+
       await notificationsService.addNotification(WhoisNotification(
         deviceToken: (await FirebaseMessaging.instance.getToken())!,
         domain: widget.domain,
-        expirationDateTime: '',
+        expirationDateTime: dateTime.toIso8601String(),
         status: 'queued',
         type: notificationSettings.type == NotificationType.push
           ? 'push'
@@ -97,6 +104,30 @@ class _DomainDetailState extends State<DomainDetail> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<DateTime?> _showDatePicker() async {
+    final translations = AppLocalizations.of(context);
+
+    await showDialog(context: context, builder: (context) => AlertDialog(
+      title: Text(translations.translate('Unesite datum')),
+      content: Text(translations.translate('Nismo mogli da pronadjemo datum isteka za ovaj domen. Molim vas unesite datum kada zelite da budete obavesteni')),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Ok'),
+        )
+      ],
+    ));
+
+    return await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10))
+    );
   }
 
   @override

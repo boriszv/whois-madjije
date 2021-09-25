@@ -187,3 +187,35 @@ const missingWhoisData = {
         "domainNameExt": ".com"
     }
 };
+
+const invalidDomainName = {
+    "WhoisRecord": {
+        "domainName": "bdjdjdj.xn--90a3ac",
+        "parseCode": 0,
+        "audit": {
+            "createdDate": "2021-09-25 21:29:01 UTC",
+            "updatedDate": "2021-09-25 21:29:01 UTC"
+        },
+        "registryData": {
+            "domainName": "bdjdjdj.xn--90a3ac",
+            "rawText": "%ERROR:102: Invalid domain name",
+            "parseCode": 64,
+            "header": "%ERROR:102: Invalid domain name",
+            "strippedText": "",
+            "footer": "\n",
+            "audit": {
+                "createdDate": "2021-09-25 21:29:01 UTC",
+                "updatedDate": "2021-09-25 21:29:01 UTC"
+            },
+            "whoisServer": "whois.rnids.rs"
+        },
+        "domainNameExt": ".xn--90a3ac"
+    }
+};
+
+const invalidDomainName1 = {
+    "ErrorMessage": {
+        "errorCode": "WHOIS_01",
+        "msg": "\"bdjd jdj.xn--90a3ac\" is an invalid domain name"
+    }
+};

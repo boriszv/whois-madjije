@@ -23,6 +23,7 @@ void main() {
 
       final result = await service.getWhoisData('google.com');
       expect(result.exists, true);
+      expect(result.valid, true);
 
       verifyDates(result);
 
@@ -55,6 +56,7 @@ void main() {
       final result = await service.getWhoisData('гугл.мкд');
 
       expect(result.exists, true);
+      expect(result.valid, true);
 
       verifyDates(result);
 
@@ -83,6 +85,32 @@ void main() {
       final result = await service.getWhoisData('randomdomain.com');
 
       expect(result.exists, false);
+    });
+    
+    test('invalid domain', () async {
+      final api = MockWhoisApi();
+
+      when(api.getWhoisData(any)) 
+        .thenAnswer((_) async => invalidDomainName);
+
+      final service = WhoisDataService(api, SearchHistoryService());
+
+      final result = await service.getWhoisData('invalid domain');
+
+      expect(result.valid, false);
+    });
+
+    test('invalid domain 1', () async {
+      final api = MockWhoisApi();
+
+      when(api.getWhoisData(any)) 
+        .thenAnswer((_) async => invalidDomainName1);
+
+      final service = WhoisDataService(api, SearchHistoryService());
+
+      final result = await service.getWhoisData('invalid domain');
+
+      expect(result.valid, false);
     });
   });
 }

@@ -9,6 +9,10 @@ class HomeView extends StatelessWidget {
   final controller = TextEditingController();
 
   onSearchClick(BuildContext context) {
+    if (controller.text.isEmpty) {
+      return;
+    }
+
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return controller.text.contains('.')
           ? DomainDetail(domain: controller.text)
