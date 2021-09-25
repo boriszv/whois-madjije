@@ -1,9 +1,137 @@
-// import * as functions from "firebase-functions";
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import { QueryDocumentSnapshot } from "firebase-functions/v1/firestore";
+import { EventContext } from "firebase-functions";
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+admin.initializeApp();
+
+const firestore = admin.firestore();
+const messaging = admin.messaging();
+
+interface Notification {
+  type: 'email' | 'push';
+  deviceToken?: string;
+  domain: string;
+  expirationDateTime: string;
+  status?: 'queued' | 'failed' | 'success' | 'cancelled';
+}
+
+const deviceToken = 'cc6Qo3nzS96lG8oKu3w3ly:APA91bHjGupbyL-fYGEGbqWmRNj5y0zsCMAPXj9MT1jkc8BR3V-YI7A_Uku77JUMdt8qqeWHi2VDKx7imSdVN-mfgvCmFu6zCFY0clsfEOh7tftkNgp0LUcVb391PflwBVAXCK8UHa3g';
+
+const dataToSeed: Notification[] = [
+  {
+    type: 'push',
+    deviceToken: deviceToken,
+    domain: 'prioritysoft.io',
+    expirationDateTime: new Date().toISOString(),
+    status: 'queued'
+  },
+  {
+    type: 'push',
+    deviceToken: deviceToken,
+    domain: 'prioritysoft.rs',
+    expirationDateTime: new Date().toISOString(),
+    status: 'queued'
+  },
+];
+
+export const seedData = functions.https.onRequest(async (req, res) => {
+  for (const item of dataToSeed) {
+    await firestore.collection('notifications')
+      .add(item);
+  }
+  res.send(200);
+});
+
+const sendNotifications = async (context: EventContext) => {
+  // .onRequest(async (req, res) => {
+  try {
+    const baseQuery = firestore.collection('notifications')
+      .where('expirationDateTime', '<=', new Date().toISOString());
+
+    const queuedNotifciations = await baseQuery
+      .where('status', '==', 'queued')
+      .get();
+
+    const failedNotifciations = await baseQuery
+      .where('status', '==', 'failed')
+      .get();
+
+    for (const notification of queuedNotifciations.docs)
+      await notification.ref.set({ status: 'failed' }, { merge: true });
+
+    const notificationsToSend = [
+      ...queuedNotifciations.docs,
+      ...failedNotifciations.docs,
+    ];
+
+    const pushNotificationsToSend = [];
+    const pushNotificationDocumentsToUpdate = [];
+
+    for (const notificationDoc of notificationsToSend) {
+      const notification = notificationDoc.data() as Notification;
+
+      switch (notification.type) {
+        case 'email':
+          await sendEmailNotification(notificationDoc);
+          break;
+
+        case 'push':
+          console.log('push notif')
+          const data = notificationDoc.data() as Notification;
+          console.log(data.deviceToken)
+
+          if (!data.deviceToken)
+            continue;
+
+          pushNotificationsToSend.push(constructPushNotification(data));
+          pushNotificationDocumentsToUpdate.push(notificationDoc);
+
+          console.log(constructPushNotification(data));
+
+          break;
+      }
+    }
+
+    if (pushNotificationsToSend.length > 0) {
+      console.log('sending messages')
+      await messaging.sendAll(pushNotificationsToSend);
+
+      for (const notification of pushNotificationDocumentsToUpdate) {
+        await notification.ref.set({ 'status': 'success' }, { merge: true });
+      }
+    }
+
+    // res.send(200);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+
+export const sendNotificationsTest = functions.pubsub.schedule('0 19 * * *')
+  .onRun(sendNotifications);
+
+export const sendNotificationsFirst = functions.pubsub.schedule('0 10 * * *')
+  .onRun(sendNotifications);
+
+export const sendNotificationsSecond = functions.pubsub.schedule('0 14 * * *')
+  .onRun(sendNotifications);
+
+export const sendNotificationsThird = functions.pubsub.schedule('0 22 * * *')
+  .onRun(sendNotifications);
+
+const constructPushNotification = (data: Notification) => {
+  return {
+    token: data.deviceToken!,
+    android: {},
+    notification: {
+      title: `Domen ${data.domain} je istekao ${data.expirationDateTime}`,
+      body: 'Kliknite na obavestenje kako biste usli u aplikaciju'
+    },
+  }
+}
+
+const sendEmailNotification = async (notification: QueryDocumentSnapshot) => {
+
+};
