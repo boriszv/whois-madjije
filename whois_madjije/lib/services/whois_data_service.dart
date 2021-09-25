@@ -79,7 +79,7 @@ class WhoisDataService implements IWhoisDataService {
       nameServers: _first([
         record['nameServers']?['hostNames'],
         record['registryData']?['nameServers']?['hostNames'],
-        []
+        <String>[]
       ]),
     );
 
