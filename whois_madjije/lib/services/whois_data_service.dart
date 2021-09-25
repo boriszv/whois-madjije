@@ -42,10 +42,12 @@ class WhoisDataService implements IWhoisDataService {
     final record = result['WhoisRecord'];
 
     if (record['dataError'] == 'MISSING_WHOIS_DATA') {
+      await _addSearchRecod(domain, false);
+
       return WhoisData.missingData();
     }
 
-    return WhoisData(
+    final data = WhoisData(
       exists: true,
       domainName: record['domainName'],
 
@@ -80,6 +82,18 @@ class WhoisDataService implements IWhoisDataService {
         []
       ]),
     );
+
+    await _addSearchRecod(domain, true);
+  
+    return data;
+  }
+
+  Future<void> _addSearchRecod(String domain, bool isRegistered) async {
+    await _searchHistory.addSearchRecord(SearchHistoryRecord(
+      domainName: domain,
+      dateTime: DateTime.now(),
+      isRegistered: isRegistered
+    ));
   }
 }
 
