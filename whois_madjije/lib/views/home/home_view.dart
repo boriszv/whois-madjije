@@ -10,7 +10,9 @@ class HomeView extends StatelessWidget {
 
   onSearchClick(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return controller.text.contains('.') ? DomainDetail() : DomainList();
+      return controller.text.contains('.')
+        ? DomainDetail(domain: controller.text)
+        : DomainList();
     }));
   }
 
