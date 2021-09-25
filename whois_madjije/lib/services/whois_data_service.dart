@@ -30,7 +30,7 @@ class WhoisDataService implements IWhoisDataService {
     final list = <DomainAvailability>[];
     for (final domainName in domains) {
       final result = await getWhoisData(domain + domainName);
-      list.add(DomainAvailability(domainName: domainName, isRegistered: result.exists));
+      list.add(DomainAvailability(domainName: domain + domainName, isRegistered: result.exists));
       yield list;
     }
   }
@@ -97,10 +97,11 @@ class WhoisDataService implements IWhoisDataService {
   }
 }
 
-dynamic _first(List<dynamic> data) {
+List<String> _first(List<dynamic> data) {
   for (final item in data) {
     if (item != null) {
-      return item;
+      return List<String>.from(item);
     }
   }
+  return [];
 }

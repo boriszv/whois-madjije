@@ -1,11 +1,14 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/app_localizations.dart';
 import 'package:whois_madjije/services/favorites_service.dart';
 import 'package:whois_madjije/services/ifavorites_service.dart';
 import 'package:whois_madjije/services/inotifications_service.dart';
+import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 import 'package:whois_madjije/services/notifications_service.dart';
+import 'package:whois_madjije/services/settings_service.dart';
 
 class DomainDetail extends StatefulWidget {
 
@@ -24,6 +27,8 @@ class _DomainDetailState extends State<DomainDetail> {
 
   final notificationsService = GetIt.I<INotificationsService>();
   final favoritesService = GetIt.I<IFavoritesService>();
+
+  final settingsService = GetIt.I<ISettingsService>();
 
   var loading = false;
 
@@ -51,6 +56,49 @@ class _DomainDetailState extends State<DomainDetail> {
     });
   }
 
+  Future<void> _favoriteClicked() async {
+    String message;
+
+    if (isInFavorites) {
+      await favoritesService.removeFromFavorites(widget.domain);
+      message = 'Obrisano iz omiljenih';
+
+    } else {
+      await favoritesService.addFavorite(Favorite(
+        dateTime: DateTime.now(),
+        domainName: widget.domain
+      ));
+      message = 'Dodato u omiljene';
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _notificationClicked() async {
+    String message;
+
+    if (isInFavorites) {
+      await notificationsService.cancelNotification(widget.domain);
+      message = 'Podsetnik je otkazan';
+
+    } else {
+      final notificationSettings = await settingsService.getNotificationSettings();
+
+      await notificationsService.addNotification(WhoisNotification(
+        deviceToken: (await FirebaseMessaging.instance.getToken())!,
+        domain: widget.domain,
+        expirationDateTime: '',
+        status: 'queued',
+        type: notificationSettings.type == NotificationType.push
+          ? 'push'
+          : 'email'
+      ));
+      message = 'Podsetnik je dodat';
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
@@ -62,7 +110,13 @@ class _DomainDetailState extends State<DomainDetail> {
       ),
       floatingActionButton: _FloatingButton(
         hasNotification: hasNotification,
-        isInFavorites: isInFavorites
+        isInFavorites: isInFavorites,
+        favoriteClicked: () {
+          _favoriteClicked();
+        },
+        notificationClicked: () {
+          _notificationClicked();
+        },
       ),
     );
   }
@@ -73,9 +127,14 @@ class _FloatingButton extends StatelessWidget {
   final bool hasNotification;
   final bool isInFavorites;
 
+  final Function favoriteClicked;
+  final Function notificationClicked;
+
   const _FloatingButton({
     required this.hasNotification,
     required this.isInFavorites,
+    required this.favoriteClicked,
+    required this.notificationClicked,
   });
 
   @override
@@ -101,7 +160,9 @@ class _FloatingButton extends StatelessWidget {
     return PopupMenuButton(
       itemBuilder: (context) => [
         PopupMenuItem<int>(
-          value: 0,
+          onTap: () {
+            favoriteClicked();
+          },
           child: Row(
             children: [
               Icon(favoriteIcon, color: Theme.of(context).primaryColor),
@@ -111,7 +172,9 @@ class _FloatingButton extends StatelessWidget {
           ),
         ),
         PopupMenuItem<int>(
-          value: 0,
+          onTap: () {
+            notificationClicked();
+          },
           child: Row(
             children: [
               Icon(notificationIcon, color: Theme.of(context).primaryColor),
