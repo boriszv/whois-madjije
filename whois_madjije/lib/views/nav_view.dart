@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
                   return MaterialPageRoute(
                     settings: settings,
                     builder: (BuildContext context) {
-                      return const HomeView();
+                      return HomeView();
                     },
                   );
                 },
