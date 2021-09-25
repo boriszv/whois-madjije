@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:whois_madjije/di.dart';
 import 'package:whois_madjije/views/home.dart';
 
 import 'app_localizations.dart';
 
 void main() {
+  setupDependencyInjection();
   runApp(const App());
 }
 class App extends StatelessWidget {
@@ -37,7 +39,7 @@ class App extends StatelessWidget {
 
         return supportedLocales.first;
       },
-      home: const Home(),
+      home: Home(),
     );
   }
 }
