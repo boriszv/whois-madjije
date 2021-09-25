@@ -16,7 +16,7 @@ class RegistrationStatus extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              offset: Offset.fromDirection(-6, 3),
+              offset: Offset.fromDirection(-6, 4),
               blurRadius: 4,
               color: const Color.fromRGBO(0, 0, 0, 0.15),
               spreadRadius: 2,
