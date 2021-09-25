@@ -5,9 +5,11 @@ class SearchTextbox extends StatelessWidget {
   const SearchTextbox({
     Key? key,
     required this.controller,
+    required this.onSubmit,
   }) : super(key: key);
 
   final TextEditingController controller;
+  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class SearchTextbox extends StatelessWidget {
         children: [
           TextField(
             controller: controller,
+            keyboardType: TextInputType.url,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: const EdgeInsets.only(
@@ -33,7 +36,9 @@ class SearchTextbox extends StatelessWidget {
             bottom: 0,
             right: -2,
             child: ElevatedButton(
-              onPressed: () => {},
+              onPressed: () {
+                onSubmit();
+              },
               child: const Icon(
                 Icons.search,
                 color: Colors.white,

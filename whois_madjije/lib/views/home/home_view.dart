@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
+import 'package:whois_madjije/views/domain_list/domain_list.dart';
 import '../../app_localizations.dart';
 import 'home_textbox.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key}) : super(key: key);
+  HomeView({Key? key}) : super(key: key);
+  final controller = TextEditingController();
+
+  onSearchClick(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return controller.text.contains('.') ? DomainDetail() : DomainList();
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
-    final controller = TextEditingController();
 
     return Scaffold(
       body: Container(
@@ -39,6 +47,9 @@ class HomeView extends StatelessWidget {
               // TEXTFIELD
               HomeTextbox(
                 controller: controller,
+                onSubmit: () {
+                  onSearchClick(context);
+                },
               ),
 
               const SizedBox(height: 50),
@@ -46,7 +57,9 @@ class HomeView extends StatelessWidget {
                 height: 50,
                 width: 130,
                 child: ElevatedButton(
-                  onPressed: () => {},
+                  onPressed: () {
+                    onSearchClick(context);
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,

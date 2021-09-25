@@ -6,9 +6,11 @@ class HomeTextbox extends StatelessWidget {
   const HomeTextbox({
     Key? key,
     required this.controller,
+    required this.onSubmit,
   }) : super(key: key);
 
   final TextEditingController controller;
+  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class HomeTextbox extends StatelessWidget {
         children: [
           TextField(
             controller: controller,
+            keyboardType: TextInputType.url,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: const EdgeInsets.only(
@@ -39,7 +42,9 @@ class HomeTextbox extends StatelessWidget {
             bottom: 0,
             right: -2,
             child: ElevatedButton(
-              onPressed: () => {},
+              onPressed: () {
+                onSubmit();
+              },
               child: const Icon(
                 Icons.chevron_right,
                 color: Colors.white,
