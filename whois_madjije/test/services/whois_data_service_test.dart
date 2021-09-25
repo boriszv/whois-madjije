@@ -13,7 +13,6 @@ void main() {
   group('WhoisDataService Tests', () {
 
     test('google.com', () async {
-
       final api = MockWhoisApi();
 
       when(api.getWhoisData(any)) 
@@ -22,15 +21,9 @@ void main() {
       final service = WhoisDataService(api);
 
       final result = await service.getWhoisData('google.com');
+      expect(result.exists, true);
 
-      expect(result.createdDate, isNotNull);
-      expect(result.createdDate, isNotEmpty);
-
-      expect(result.updatedDate, isNotNull);
-      expect(result.updatedDate, isNotEmpty);
-
-      expect(result.expiresDate, isNotNull);
-      expect(result.expiresDate, isNotEmpty);
+      verifyDates(result);
 
       expect(result.registrantName, isNull);
 
@@ -51,7 +44,6 @@ void main() {
     });
   
     test('гугл.мкд', () async {
-
       final api = MockWhoisApi();
 
       when(api.getWhoisData(any)) 
@@ -61,14 +53,9 @@ void main() {
 
       final result = await service.getWhoisData('гугл.мкд');
 
-      expect(result.createdDate, isNotNull);
-      expect(result.createdDate, isNotEmpty);
+      expect(result.exists, true);
 
-      expect(result.updatedDate, isNotNull);
-      expect(result.updatedDate, isNotEmpty);
-
-      expect(result.expiresDate, isNotNull);
-      expect(result.expiresDate, isNotEmpty);
+      verifyDates(result);
 
       expect(result.registrantName, isNotNull);
 
@@ -83,7 +70,31 @@ void main() {
 
       expect(result.nameServers.length, 2);
     });
+
+    test('nonexistent domain', () async {
+      final api = MockWhoisApi();
+
+      when(api.getWhoisData(any)) 
+        .thenAnswer((_) async => missingWhoisData);
+
+      final service = WhoisDataService(api);
+
+      final result = await service.getWhoisData('randomdomain.com');
+
+      expect(result.exists, false);
+    });
   });
+}
+
+void verifyDates(WhoisData result) {
+  expect(result.createdDate, isNotNull);
+  expect(result.createdDate, isNotEmpty);
+
+  expect(result.updatedDate, isNotNull);
+  expect(result.updatedDate, isNotEmpty);
+
+  expect(result.expiresDate, isNotNull);
+  expect(result.expiresDate, isNotEmpty);
 }
 
 void verifyRegistrantExists(WhoisData result) {
@@ -99,7 +110,6 @@ void verifyRegistrantExists(WhoisData result) {
   expect(result.registrantCountryCode, isNotNull);
   expect(result.registrantCountryCode, isNotEmpty);
 }
-
 
 void verifyAdministrativeContactExists(WhoisData result) {
   expect(result.administrativeContactOrganization, isNotNull);
