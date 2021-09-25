@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../search_textbox.dart';
-
 class DomainDetail extends StatelessWidget {
-  DomainDetail({Key? key}) : super(key: key);
-  final TextEditingController controller = TextEditingController();
+  const DomainDetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            SearchTextbox(
-              controller: controller,
-              onSubmit: () => {},
-            ),
-            const Icon(
-              Icons.list,
-              size: 50,
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        foregroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
+        title: const Text('Domain Detail'),
       ),
     );
   }

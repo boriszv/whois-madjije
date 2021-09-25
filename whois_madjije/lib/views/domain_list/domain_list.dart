@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:whois_madjije/views/search_textbox.dart';
 
 class DomainList extends StatelessWidget {
   DomainList({Key? key}) : super(key: key);
@@ -8,19 +7,10 @@ class DomainList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            SearchTextbox(
-              controller: controller,
-              onSubmit: () => {},
-            ),
-            const Icon(
-              Icons.list,
-              size: 50,
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        foregroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.white,
+        title: const Text('Domain List'),
       ),
     );
   }
