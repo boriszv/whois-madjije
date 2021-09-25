@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:whois_madjije/di.dart';
-import 'package:whois_madjije/views/home.dart';
+import 'package:whois_madjije/views/nav_view.dart';
 
 import 'app_localizations.dart';
 
