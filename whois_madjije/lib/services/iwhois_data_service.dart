@@ -8,11 +8,14 @@ class DomainAvailability {
 }
 
 class WhoisData {
-  final String domainName;
 
-  final String createdDate;
-  final String updatedDate;
-  final String expiresDate;
+  final bool exists;
+
+  final String? domainName;
+
+  final String? createdDate;
+  final String? updatedDate;
+  final String? expiresDate;
 
   // if there is no data for "organization", "state" and so on display this name if available
   final String? registrantName;
@@ -26,7 +29,7 @@ class WhoisData {
   final String? administrativeContactState;
   final String? administrativeContactCountry;
   final String? administrativeContactCountryCode;
-  
+
   final String? technicalContactOrganization;
   final String? technicalContactState;
   final String? technicalContactCountry;
@@ -40,10 +43,11 @@ class WhoisData {
   final List<String> nameServers;
 
   WhoisData({
-    required this.domainName,
-    required this.createdDate,
-    required this.updatedDate,
-    required this.expiresDate,
+    required this.exists,
+    this.domainName,
+    this.createdDate,
+    this.updatedDate,
+    this.expiresDate,
     this.registrantName,
     this.registrantOrganization,
     this.registrantState,
@@ -62,6 +66,12 @@ class WhoisData {
     this.contactEmail,
 
     this.nameServers = const []});
+
+  factory WhoisData.missingData() {
+    return WhoisData(
+      exists: false,
+    );
+  }
 }
 
 abstract class IWhoisDataService {

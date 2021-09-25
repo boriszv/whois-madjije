@@ -19,7 +19,12 @@ class WhoisDataService implements IWhoisDataService {
 
     final record = result['WhoisRecord'];
 
+    if (record['dataError'] == 'MISSING_WHOIS_DATA') {
+      return WhoisData.missingData();
+    }
+
     return WhoisData(
+      exists: true,
       domainName: record['domainName'],
 
       createdDate: record['registryData']['createdDate'],
