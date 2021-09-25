@@ -11,7 +11,7 @@ class NotificationsService implements INotificationsService {
   NotificationsService(this._settings);
 
   @override
-  Future<WhoisNotification?> getNotification(String domain, { String? deviceToken, String? email }) async {
+  Future<WhoisNotification?> getNotification(String domain) async {
     final baseQuery = FirebaseFirestore.instance.collection('notifications')
       .where('domain', isEqualTo: domain);
 

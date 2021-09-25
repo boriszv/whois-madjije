@@ -24,7 +24,7 @@ class WhoisNotification {
 }
 
 abstract class INotificationsService {
-  Future<WhoisNotification?> getNotification(String domain, { String? deviceToken, String? email });
+  Future<WhoisNotification?> getNotification(String domain);
   Future<void> cancelNotification(String domain);
   Future<void> addNotification(WhoisNotification notification);
 }

@@ -5,21 +5,13 @@ import 'package:whois_madjije/services/isettings_service.dart';
 
 class SettingsService implements ISettingsService {
 
-  late SharedPreferences instance;
-
-  SettingsService() {
-    SharedPreferences.getInstance().then((value) {
-      instance = value;
-    });
-  }
-
   @override
   Future<bool> getDarkMode()
-    async => instance.getBool('darkmode') ?? false;
+    async => (await SharedPreferences.getInstance()).getBool('darkmode') ?? false;
 
   @override
   Future<void> setDarkMode(bool darkMode)
-    => instance.setBool('darkmode', darkMode);
+    async => (await SharedPreferences.getInstance()).setBool('darkmode', darkMode);
 
   @override
   Future<String?> getEmailForNotifications() async {
@@ -29,15 +21,15 @@ class SettingsService implements ISettingsService {
 
   @override
   Future<String> getLanguage()
-    async => instance.getString('language') ?? 'sr';
+    async => (await SharedPreferences.getInstance()).getString('language') ?? 'sr';
 
   @override
   Future<void> setLanguage(String language) 
-    => instance.setString('language', language);
+    async => (await SharedPreferences.getInstance()).setString('language', language);
 
   @override
   Future<NotificationSettings> getNotificationSettings() async {
-    final data = instance.getString('notification_settings');
+    final data = (await SharedPreferences.getInstance()).getString('notification_settings');
     if (data == null) {
       return NotificationSettings(
         email: null,
@@ -54,7 +46,7 @@ class SettingsService implements ISettingsService {
 
   @override
   Future<void> setNotificationSettings(NotificationSettings settings)
-    => instance.setString('notification_settings', json.encode({
+    async => (await SharedPreferences.getInstance()).setString('notification_settings', json.encode({
       'email': settings.email,
       'type': settings.type,
     }));
