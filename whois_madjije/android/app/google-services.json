@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "775303270784",
+    "project_id": "whoismadjije",
+    "storage_bucket": "whoismadjije.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775303270784:android:1e70753908d91d52ceb165",
+        "android_client_info": {
+          "package_name": "io.prioritysoft.whoismadjije"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775303270784-mfdion5h7k1r4io0fmq4m10i2dems3p3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2xEkBAQ9Bb7GZeakN58xg7gb7Ch1Sgt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775303270784-mfdion5h7k1r4io0fmq4m10i2dems3p3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
