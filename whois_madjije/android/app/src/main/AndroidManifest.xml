@@ -2,7 +2,7 @@
     package="com.example.whois_madjije">
    <application
         android:name="androidx.multidex.MultiDexApplication"
-        android:label="Whois Priority"
+        android:label="Priority Lookup"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
