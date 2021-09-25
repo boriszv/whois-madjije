@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 
+import 'registration_status.dart';
+
 class DomainList extends StatefulWidget {
   final String domain;
 
@@ -38,23 +40,25 @@ class _DomainListState extends State<DomainList> {
       appBar: AppBar(
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.white,
-        title: const Text('Domain List'),
+        title: const Text('Domeni'),
+        elevation: 3,
       ),
       body: ListView.builder(
         itemCount: domainAvailabilityList.length + 1,
         itemBuilder: (context, itemIndex) {
           return itemIndex < domainAvailabilityList.length
-              ? Text(domainAvailabilityList[itemIndex].domainName)
+              ? RegistrationStatus(
+                  domainAvailability: domainAvailabilityList[itemIndex],
+                )
               : isLoading
                   ? const SizedBox(
-                      width: 50,
-                      height: 50,
                       child: CircularProgressIndicator(),
+                      height: 50,
+                      width: 50,
                     )
-                  : const SizedBox();
+                  : const SizedBox(height: 20);
         },
       ),
-      // isLoading ? const CircularProgressIndicator() : Container()
     );
   }
 }
