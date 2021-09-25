@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../app_localizations.dart';
+import '../../app_localizations.dart';
 
 class HomeTextbox extends StatelessWidget {
   const HomeTextbox({
     Key? key,
     required this.controller,
-  });
+  }) : super(key: key);
 
   final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
-    
+
     return Material(
       elevation: 5.0,
       shape: const RoundedRectangleBorder(

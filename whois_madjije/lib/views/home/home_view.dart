@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../app_localizations.dart';
+import '../../app_localizations.dart';
 import 'home_textbox.dart';
 
 class HomeView extends StatelessWidget {

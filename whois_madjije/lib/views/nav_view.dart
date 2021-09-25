@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:whois_madjije/views/home_view.dart';
 
 import '../app_localizations.dart';
+import 'home/home_view.dart';
 
 class NavConstants {
   static const HOME = 0;
