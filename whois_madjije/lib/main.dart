@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:whois_madjije/views/home.dart';
 
 import 'app_localizations.dart';
 
 void main() {
   runApp(const App());
 }
-
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
@@ -18,15 +18,15 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('sr'),
-        const Locale('sr-sp'),
+      supportedLocales: const [
+         Locale('sr'),
+         Locale('sr-sp'),
       ],
       localeResolutionCallback: (locale, supportedLocales) {
         // for (final item in supportedLocales) {
@@ -38,18 +38,6 @@ class App extends StatelessWidget {
         return supportedLocales.first;
       },
       home: const Home(),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({ Key? key }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context);
-    return Scaffold(
-      body: Center(child: Text(translations.translate('test'))),
     );
   }
 }
