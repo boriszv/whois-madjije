@@ -160,13 +160,13 @@ const sendNotifications = async (context?: EventContext) => {
 export const sendNotificationsTest = functions.pubsub.schedule('0 19 * * *')
   .onRun(sendNotifications);
 
-export const sendNotificationsFirst = functions.pubsub.schedule('0 10 * * *')
+export const sendNotificationsFirst = functions.pubsub.schedule('5 4 * * *')
   .onRun(sendNotifications);
 
-export const sendNotificationsSecond = functions.pubsub.schedule('0 14 * * *')
+export const sendNotificationsSecond = functions.pubsub.schedule('5 6 * * *')
   .onRun(sendNotifications);
 
-export const sendNotificationsThird = functions.pubsub.schedule('0 22 * * *')
+export const sendNotificationsThird = functions.pubsub.schedule('5 7 * * *')
   .onRun(sendNotifications);
 
 const constructPushNotification = (data: Notification) => {
