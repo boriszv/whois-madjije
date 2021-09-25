@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /notifications/{notificationId} {
+    	allow read: if false;
+      allow update: if false;
+      allow create: if validateCreateRequest();
+		}
+  }
+}
+
+function validateCreateRequest() {
+  return 
+  
+  request.resource.data.type == 'email' || request.resource.data.type == 'push' &&
+
+  (
+    (request.resource.data.type == 'email' && notNullOrEmpty(request.resource.data.email)) ||
+    (request.resource.data.type == 'push' && notNullOrEmpty(request.resource.data.deviceToken))
+  ) &&
+
+  request.resource.data.status == 'queued'
+}
+
+function notNullOrEmpty(data) {
+  return !(!data || data == '');
+}
