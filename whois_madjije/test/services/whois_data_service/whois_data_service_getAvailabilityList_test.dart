@@ -3,6 +3,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:whois_madjije/services/iwhois_api.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
+import 'package:whois_madjije/services/search_history_service.dart';
 import 'package:whois_madjije/services/whois_data_service.dart';
 
 import 'domain_data.dart';
@@ -18,7 +19,7 @@ void main() {
       when(api.getWhoisData(any)) 
         .thenAnswer((_) async => googleMKD);
 
-      final service = WhoisDataService(api);
+      final service = WhoisDataService(api, SearchHistoryService());
 
       final stream = service.getAvailabilityList('testdomen');
       await stream.last;

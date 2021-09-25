@@ -11,10 +11,6 @@ enum SearchHistoryDatabaseProvider {
 
 class SearchHistoryService implements ISearchHistoryService {
 
-  final SearchHistoryDatabaseProvider _provider;
-
-  SearchHistoryService(this._provider);
-
   @override
   Future<List<SearchHistoryRecord>> getSearchHistory() async {
     final prefs = await SharedPreferences.getInstance();
@@ -22,13 +18,7 @@ class SearchHistoryService implements ISearchHistoryService {
 
     final List<dynamic> jsonData = json.decode(historyJson);
 
-    final List<SearchHistoryRecord> list = jsonData
-      .map((x) => SearchHistoryRecord(
-        domainName: x['domainName'],
-        dateTime: DateTime.parse(x['dateTime']),
-        isRegistered: x['isRegistered']
-      ))
-      .toList();
+    final List<SearchHistoryRecord> list = _parseList(jsonData);
 
     list.sort((x, y) => y.dateTime.compareTo(x.dateTime));
 
@@ -41,14 +31,34 @@ class SearchHistoryService implements ISearchHistoryService {
 
     final historyJson = prefs.getString('search_history') ?? '[]';
 
-    final jsonData = json.decode(historyJson) as List<dynamic>;
+    var jsonData = json.decode(historyJson) as List<dynamic>;
 
-    jsonData.add({
-      'domainName': record.domainName,
-      'dateTime': record.dateTime.toIso8601String(),
-      'isRegistered': record.isRegistered,
-    });
+    final list = _parseList(jsonData);
+    final existingRecord = list.firstWhere((x) => record.domainName == x.domainName,
+      orElse: () => SearchHistoryRecord.empty());
+
+    if (existingRecord.isEmpty()) {
+      jsonData.add(record.toJson());
+
+    } else {
+      final index = list.indexOf(existingRecord);
+      existingRecord.dateTime = record.dateTime;
+
+      list[index] = existingRecord;
+
+      jsonData = list.map((x) => x.toJson()).toList();
+    }
 
     await prefs.setString('search_history', json.encode(jsonData));
+  }
+
+  List<SearchHistoryRecord> _parseList(List<dynamic> jsonData) {
+    return jsonData
+      .map((x) => SearchHistoryRecord(
+        domainName: x['domainName'],
+        dateTime: DateTime.parse(x['dateTime']),
+        isRegistered: x['isRegistered']
+      ))
+      .toList();
   }
 }

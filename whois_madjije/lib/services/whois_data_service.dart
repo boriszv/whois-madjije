@@ -1,11 +1,13 @@
+import 'package:whois_madjije/services/isearch_history_service.dart';
 import 'package:whois_madjije/services/iwhois_api.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 
 class WhoisDataService implements IWhoisDataService {
 
-  final IWhoisApi api;
+  final IWhoisApi _api;
+  final ISearchHistoryService _searchHistory;
 
-  WhoisDataService(this.api);
+  WhoisDataService(this._api, this._searchHistory);
 
   @override
   Stream<List<DomainAvailability>> getAvailabilityList(String domain) async* {
@@ -35,7 +37,7 @@ class WhoisDataService implements IWhoisDataService {
 
   @override
   Future<WhoisData> getWhoisData(String domain) async {
-    final result = await api.getWhoisData(domain);
+    final result = await _api.getWhoisData(domain);
 
     final record = result['WhoisRecord'];
 

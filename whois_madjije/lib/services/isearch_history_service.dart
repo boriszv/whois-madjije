@@ -1,12 +1,30 @@
 class SearchHistoryRecord {
-  final String domainName;
-  final DateTime dateTime;
-  final bool isRegistered;
+  String domainName;
+  DateTime dateTime;
+  bool isRegistered;
 
   SearchHistoryRecord({
     required this.domainName,
     required this.dateTime,
     required this.isRegistered});
+
+  bool isEmpty() => domainName == '!empty!';
+
+  factory SearchHistoryRecord.empty() {
+    return SearchHistoryRecord(
+      dateTime: DateTime.now(),
+      domainName: '!empty!',
+      isRegistered: false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'domainName': domainName,
+      'dateTime': dateTime.toIso8601String(),
+      'isRegistered': isRegistered,
+    };
+  }
 }
 
 abstract class ISearchHistoryService {
