@@ -15,7 +15,6 @@ class NotificationSettings {
 abstract class ISettingsService {
 
   Future<String?> getEmailForNotifications();
-  Future<void> setEmailForNotifications(String email);
 
   Future<String> getLanguage();
   Future<void> setLanguage(String language);
@@ -24,5 +23,5 @@ abstract class ISettingsService {
   Future<void> setNotificationSettings(NotificationSettings settings);
 
   Future<bool> getDarkMode();
-  Future<void> setDarkMode(bool language);
+  Future<void> setDarkMode(bool darkMode);
 }
