@@ -30,7 +30,11 @@ class WhoisDataService implements IWhoisDataService {
     final list = <DomainAvailability>[];
     for (final domainName in domains) {
       final result = await getWhoisData(domain + domainName);
-      list.add(DomainAvailability(domainName: domain + domainName, isRegistered: result.exists));
+      list.add(DomainAvailability(
+        domainName: domain + domainName,
+        isRegistered: result.exists,
+        valid: result.valid,
+      ));
       yield list;
     }
   }

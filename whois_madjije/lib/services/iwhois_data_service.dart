@@ -1,10 +1,13 @@
 class DomainAvailability {
   final String domainName;
   final bool isRegistered;
+  final bool valid;
 
   DomainAvailability({
     required this.domainName,
-    required this.isRegistered});
+    required this.isRegistered,
+    required this.valid
+  });
 }
 
 class WhoisData {
