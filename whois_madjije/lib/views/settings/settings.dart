@@ -80,7 +80,7 @@ class _SettingsState extends State<Settings> {
                 _Radio(
                   groupValue: language,
                   onChange: _updateLanguage,
-                  value: 'es',
+                  value: 'sr',
                   label: translations.translate('Cirilica'),
                 ),
                 _Radio(
