@@ -103,7 +103,9 @@ class WhoisDataService implements IWhoisDataService {
       ips: ips,
     );
 
-    await _addSearchRecod(domain, true);
+    if (writeToHistory) {
+      await _addSearchRecod(domain, true);
+    }
   
     return data;
   }
