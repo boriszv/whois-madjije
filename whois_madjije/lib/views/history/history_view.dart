@@ -60,6 +60,7 @@ class _HistoryViewState extends State<HistoryView> {
                   icon: Icons.history,
                 )
               : ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 20),
                   physics: const BouncingScrollPhysics(),
                   itemCount: searchHistoryRecordList.length,
                   itemBuilder: (context, itemIndex) {
