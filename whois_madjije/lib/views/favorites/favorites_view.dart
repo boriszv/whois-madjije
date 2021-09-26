@@ -78,6 +78,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                 )
               : ListView.builder(
                   itemCount: favoriteList.length,
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, itemIndex) {
                     return DomainInfo(
                       domainName: favoriteList[itemIndex].domainName,
