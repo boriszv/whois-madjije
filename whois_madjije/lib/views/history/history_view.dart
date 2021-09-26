@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/isearch_history_service.dart';
+import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
 import 'package:whois_madjije/views/domain_list/domain_info_widget.dart';
 import 'package:whois_madjije/views/sharedWidgets/loading_widget.dart';
 
@@ -54,7 +55,10 @@ class _HistoryViewState extends State<HistoryView> {
                   iconColor: Colors.black,
                   date: searchHistoryRecordList[itemIndex].dateTime,
                   isHistoryIconShown: true,
-                  onCardPressed: () {},
+                  onCardPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
+                      DomainDetail(domain: searchHistoryRecordList[itemIndex].domainName)));
+                  },
                 )
               : LoadingIndicator(isLoading: isLoading);
         },

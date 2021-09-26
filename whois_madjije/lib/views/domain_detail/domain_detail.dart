@@ -9,6 +9,8 @@ import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 import 'package:whois_madjije/services/notifications_service.dart';
 import 'package:whois_madjije/services/settings_service.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DomainDetail extends StatefulWidget {
 
@@ -44,15 +46,26 @@ class _DomainDetailState extends State<DomainDetail> {
     setState(() { loading = true; });
 
     Future.wait([
-      notificationsService.getNotification(widget.domain),
-      favoritesService.getFavorite(widget.domain),
-      whoisDataService.getWhoisData(widget.domain),  
+      notificationsService.getNotification(widget.domain).then((value) {
+        setState(() {
+          hasNotification = value != null;
+        });
+      }),
 
-    ]).then((results) {
-      hasNotification = results[0] != null;
-      isInFavorites = results[1] != null;
-      
-      setState(() { data = results[2] as WhoisData; });
+      favoritesService.getFavorite(widget.domain).then((value) {
+        setState(() {
+          isInFavorites = value != null;
+        });
+      }),
+
+      whoisDataService.getWhoisData(widget.domain).then((value) {
+        setState(() {
+          data = value;
+        });
+      }),
+
+    ]).then((value) {
+      setState(() { loading = false; });
     });
   }
 
@@ -61,7 +74,8 @@ class _DomainDetailState extends State<DomainDetail> {
 
     if (isInFavorites) {
       await favoritesService.removeFromFavorites(widget.domain);
-      message = 'Obrisano iz omiljenih';
+      setState(() { isInFavorites = false; });
+      message = 'Izbrisano iz omiljenog';
 
     } else {
       await favoritesService.addFavorite(Favorite(
@@ -70,9 +84,18 @@ class _DomainDetailState extends State<DomainDetail> {
         registered: data?.exists ?? false,
       ));
       message = 'Dodato u omiljene';
+
+      setState(() { isInFavorites = true; });
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      textColor: Colors.white,
+      fontSize: 16.0
+    );
   }
 
   Future<void> _notificationClicked() async {
@@ -81,6 +104,7 @@ class _DomainDetailState extends State<DomainDetail> {
     if (hasNotification) {
       await notificationsService.cancelNotification(widget.domain);
       message = 'Podsetnik je otkazan';
+      setState(() { hasNotification = false; });
 
     } else {
       final notificationSettings = await settingsService.getNotificationSettings();
@@ -101,10 +125,20 @@ class _DomainDetailState extends State<DomainDetail> {
           ? 'push'
           : 'email'
       ));
+
+      setState(() { hasNotification = true; });
+
       message = 'Podsetnik je dodat';
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      textColor: Colors.white,
+      fontSize: 16.0
+    );
   }
 
   Future<DateTime?> _showDatePicker() async {
@@ -150,6 +184,133 @@ class _DomainDetailState extends State<DomainDetail> {
           _notificationClicked();
         },
       ),
+    
+      body: Builder(
+        builder: (context) {
+          if (loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+
+                _Card(
+                  title: 'General info',
+                  data: [
+                    {
+                      'key': 'Domain',
+                      'value': data?.domainName ?? '',
+                    },
+                    {
+                      'key': 'Created date',
+                      'value': data?.createdDate ?? '',
+                    },
+                    {
+                      'key': 'Updated date',
+                      'value': data?.updatedDate ?? '',
+                    },
+                    {
+                      'key': 'Expires date',
+                      'value': data?.expiresDate ?? '',
+                    },
+                  ],
+                ),
+
+                _Card(
+                  title: 'Registrant',
+                  data: [
+                    {
+                      'key': 'Organization',
+                      'value': data?.registrantOrganization ?? '',
+                    },
+                    {
+                      'key': 'State',
+                      'value': data?.registrantState ?? '',
+                    },
+                    {
+                      'key': 'Country',
+                      'value': data?.registrantCountry ?? '',
+                    },
+                    {
+                      'key': 'Country code',
+                      'value': data?.registrantCountryCode ?? '',
+                    },
+                  ],
+                ),
+                
+                _Card(
+                  title: 'Administrative contact',
+                  data: [
+                    {
+                      'key': 'Organization',
+                      'value': data?.administrativeContactOrganization ?? '',
+                    },
+                    {
+                      'key': 'State',
+                      'value': data?.administrativeContactState ?? '',
+                    },
+                    {
+                      'key': 'Country',
+                      'value': data?.administrativeContactCountry ?? '',
+                    },
+                    {
+                      'key': 'Country code',
+                      'value': data?.administrativeContactCountryCode ?? '',
+                    },
+                  ],
+                ),
+                
+                _Card(
+                  title: 'Technical contact',
+                  data: [
+                    {
+                      'key': 'Organization',
+                      'value': data?.technicalContactOrganization ?? '',
+                    },
+                    {
+                      'key': 'State',
+                      'value': data?.technicalContactState ?? '',
+                    },
+                    {
+                      'key': 'Country',
+                      'value': data?.technicalContactCountry ?? '',
+                    },
+                    {
+                      'key': 'Country code',
+                      'value': data?.technicalContactCountryCode ?? '',
+                    },
+                  ],
+                ),
+
+                _Card(
+                  title: 'Registrar',
+                  data: [
+                    {
+                      'key': 'Registrar Name',
+                      'value': data?.registrarName ?? ''
+                    },
+                    {
+                      'key': 'Registrar IANAID',
+                      'value': data?.registrarIANAID ?? ''
+                    },
+                  ],
+                ),
+                
+                _Card(
+                  title: 'Nameservers',
+                  data: data?.nameServers.map((e) => {
+                    'key': '',
+                    'value': e
+                  }).toList() ?? [],
+                ),
+              ],
+            ),
+          );
+    
+        },
+      )
     );
   }
 }
@@ -189,42 +350,181 @@ class _FloatingButton extends StatelessWidget {
       ? 'Obrisi podsetnik'
       : 'Dodaj podsetnik';
 
-    return PopupMenuButton(
-      itemBuilder: (context) => [
-        PopupMenuItem<int>(
-          onTap: () {
-            favoriteClicked();
-          },
-          child: Row(
-            children: [
-              Icon(favoriteIcon, color: Theme.of(context).primaryColor),
-              const SizedBox(width: 20),
-              Text(translations.translate(favoriteText)),
-            ],
-          ),
-        ),
-        PopupMenuItem<int>(
+    return SpeedDial(
+      child: const Icon(Icons.more_vert, color: Colors.white),
+      // backgroundColor: Colors.black,
+      overlayColor: Colors.grey,
+      children: [
+        SpeedDialChild(
+          child: Icon(notificationIcon, color: Theme.of(context).primaryColor),
+          label: translations.translate(notificationText),
           onTap: () {
             notificationClicked();
-          },
-          child: Row(
-            children: [
-              Icon(notificationIcon, color: Theme.of(context).primaryColor),
-              const SizedBox(width: 20),
-              Text(translations.translate(notificationText)),
-            ],
-          ),
+          }
+        ),
+        SpeedDialChild(
+          child: Icon(favoriteIcon, color: Theme.of(context).primaryColor),
+          label: translations.translate(favoriteText),
+          onTap: () {
+            favoriteClicked();
+          }
         ),
       ],
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(60),
-        child: Container(
-          color: Theme.of(context).primaryColor,
-          width: 60,
-          height: 60,
-          child: const Icon(Icons.more_vert, color: Colors.white),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  
+  final String title;
+  final List<Map<String, String>> data;
+
+  const _Card({Key? key, required this.title, required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10, bottom: 10),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset.fromDirection(-6, 4),
+              blurRadius: 4,
+              color: const Color.fromRGBO(0, 0, 0, 0.15),
+              spreadRadius: 2,
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.headline5?.apply(
+                color: Theme.of(context).primaryColor,
+                fontWeightDelta: 2,
+                fontSizeDelta: -2
+              )),
+              
+              const SizedBox(height: 5),
+
+              ...data.map((e) {
+                if (e['key']?.isNotEmpty == true) {
+                  e['key'] = e['key']! + ': ';
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.only(top: 4.0, bottom: 4),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: RichText(
+                      text: TextSpan(
+                        text: e['key'],
+                        style: Theme.of(context).textTheme.subtitle1?.apply(
+                          color: Theme.of(context).primaryColor,
+                          fontWeightDelta: 1
+                        ),
+                        children: [
+                          TextSpan(
+                            text: e['value'],
+                            style: Theme.of(context).textTheme.bodyText1?.apply(
+                              fontWeightDelta: -1
+                            )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList()
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+// class _FloatingButton extends StatelessWidget {
+
+//   final bool hasNotification;
+//   final bool isInFavorites;
+
+//   final Function favoriteClicked;
+//   final Function notificationClicked;
+
+//   const _FloatingButton({
+//     required this.hasNotification,
+//     required this.isInFavorites,
+//     required this.favoriteClicked,
+//     required this.notificationClicked,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final translations = AppLocalizations.of(context);
+
+//     final favoriteIcon = isInFavorites
+//       ? Icons.star
+//       : Icons.star_border;
+
+//     final favoriteText = isInFavorites
+//       ? 'Izbrisi iz omiljenog'
+//       : 'Dodaj u omiljeno';
+
+//     final notificationIcon = hasNotification
+//       ? Icons.notifications
+//       : Icons.notifications_none;
+
+//     final notificationText = hasNotification
+//       ? 'Obrisi podsetnik'
+//       : 'Dodaj podsetnik';
+
+//     return PopupMenuButton(
+//       itemBuilder: (context) => [
+//         PopupMenuItem<int>(
+//           onTap: () {
+//             favoriteClicked();
+//           },
+//           child: Row(
+//             children: [
+//               Icon(favoriteIcon, color: Theme.of(context).primaryColor),
+//               const SizedBox(width: 20),
+//               Text(translations.translate(favoriteText)),
+//             ],
+//           ),
+//         ),
+//         PopupMenuItem<int>(
+//           onTap: () {
+//             notificationClicked();
+//           },
+//           child: Row(
+//             children: [
+//               Icon(notificationIcon, color: Theme.of(context).primaryColor),
+//               const SizedBox(width: 20),
+//               Text(translations.translate(notificationText)),
+//             ],
+//           ),
+//         ),
+//       ],
+//       child: FloatingActionButton(
+//         onPressed: () {},
+//         child: ClipRRect(
+//           borderRadius: BorderRadius.circular(60),
+//           child: Container(
+//             color: Theme.of(context).primaryColor,
+//             width: 60,
+//             height: 60,
+//             child: const Icon(Icons.more_vert, color: Colors.white),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+

@@ -40,6 +40,7 @@ class _AppState extends State<App> {
           title: 'Flutter Demo',
           theme: ThemeData(
             primarySwatch: Colors.orange,
+            fontFamily: 'Poppins'
           ),
           
           localizationsDelegates: const [

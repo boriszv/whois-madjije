@@ -26,6 +26,7 @@ class HomeTextbox extends StatelessWidget {
       child: Stack(
         children: [
           TextField(
+            autofocus: false,
             controller: controller,
             keyboardType: TextInputType.url,
             decoration: InputDecoration(
@@ -41,6 +42,7 @@ class HomeTextbox extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: -2,
+            height: 74,
             child: ElevatedButton(
               onPressed: () {
                 onSubmit();
