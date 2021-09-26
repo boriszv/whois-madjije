@@ -41,93 +41,107 @@ class _HomeState extends State<Home> {
     final translations = AppLocalizations.of(context);
 
     return WillPopScope(
-        onWillPop: null,
-        child: Scaffold(
-          bottomNavigationBar: Container(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
+      onWillPop: null,
+      child: Scaffold(
+        backgroundColor:
+            _index == 0 ? const Color.fromARGB(255, 22, 93, 187) : null,
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(14),
+              topRight: Radius.circular(14),
             ),
-            child: BottomNavigationBar(
-              elevation: 0,
-              selectedFontSize: 13,
-              unselectedFontSize: 13,
-              currentIndex: _index,
-              onTap: setPageIndex,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: Theme.of(context).primaryColor,
-              unselectedItemColor: Colors.grey.shade400,
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.home, size: 30),
-                  label: translations.translate('Pocetna'),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.star, size: 30),
-                  label: translations.translate('Omiljeno'),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.history, size: 30),
-                  label: translations.translate('Istorija'),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.settings, size: 30),
-                  label: translations.translate('Podesavanja'),
-                ),
-              ],
-              backgroundColor: Colors.white,
-            ),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset.fromDirection(-5, 4),
+                blurRadius: 10,
+                color: const Color.fromRGBO(0, 0, 0, 0.25),
+                spreadRadius: 4,
+              )
+            ],
           ),
-          body: IndexedStack(
-            children: <Widget>[
-              Navigator(
-                key: navigatorKeys[NavConstants.HOME],
-                onGenerateRoute: (RouteSettings settings) {
-                  return MaterialPageRoute(
-                    settings: settings,
-                    builder: (BuildContext context) {
-                      return HomeView();
-                    },
-                  );
-                },
+          child: BottomNavigationBar(
+            elevation: 0,
+            selectedFontSize: 13,
+            unselectedFontSize: 13,
+            currentIndex: _index,
+            onTap: setPageIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Theme.of(context).primaryColor,
+            unselectedItemColor: Colors.grey.shade400,
+            items: [
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.home, size: 30),
+                label: translations.translate('Pocetna'),
               ),
-              Navigator(
-                key: navigatorKeys[NavConstants.FAVORITES],
-                onGenerateRoute: (RouteSettings settings) {
-                  return MaterialPageRoute(
-                    settings: settings,
-                    builder: (BuildContext context) {
-                      return const FavoritesView();
-                    },
-                  );
-                },
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.star, size: 30),
+                label: translations.translate('Omiljeno'),
               ),
-              Navigator(
-                key: navigatorKeys[NavConstants.HISTORY],
-                onGenerateRoute: (RouteSettings settings) {
-                  return MaterialPageRoute(
-                    settings: settings,
-                    builder: (BuildContext context) {
-                      return const HistoryView();
-                    },
-                  );
-                },
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.history, size: 30),
+                label: translations.translate('Istorija'),
               ),
-              Navigator(
-                key: navigatorKeys[NavConstants.SETTINGS],
-                onGenerateRoute: (RouteSettings settings) {
-                  return MaterialPageRoute(
-                    settings: settings,
-                    builder: (BuildContext context) {
-                      return Settings();
-                    },
-                  );
-                },
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.settings, size: 30),
+                label: translations.translate('Podesavanja'),
               ),
             ],
-            index: _index,
+            backgroundColor: Colors.white,
           ),
         ),
-      );
+        body: IndexedStack(
+          children: <Widget>[
+            Navigator(
+              key: navigatorKeys[NavConstants.HOME],
+              onGenerateRoute: (RouteSettings settings) {
+                return MaterialPageRoute(
+                  settings: settings,
+                  builder: (BuildContext context) {
+                    return HomeView();
+                  },
+                );
+              },
+            ),
+            Navigator(
+              key: navigatorKeys[NavConstants.FAVORITES],
+              onGenerateRoute: (RouteSettings settings) {
+                return MaterialPageRoute(
+                  settings: settings,
+                  builder: (BuildContext context) {
+                    return const FavoritesView();
+                  },
+                );
+              },
+            ),
+            Navigator(
+              key: navigatorKeys[NavConstants.HISTORY],
+              onGenerateRoute: (RouteSettings settings) {
+                return MaterialPageRoute(
+                  settings: settings,
+                  builder: (BuildContext context) {
+                    return const HistoryView();
+                  },
+                );
+              },
+            ),
+            Navigator(
+              key: navigatorKeys[NavConstants.SETTINGS],
+              onGenerateRoute: (RouteSettings settings) {
+                return MaterialPageRoute(
+                  settings: settings,
+                  builder: (BuildContext context) {
+                    return Settings();
+                  },
+                );
+              },
+            ),
+          ],
+          index: _index,
+        ),
+      ),
+    );
   }
 }

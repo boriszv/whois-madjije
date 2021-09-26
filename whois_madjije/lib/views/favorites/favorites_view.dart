@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/ifavorites_service.dart';
+import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
 import 'package:whois_madjije/views/domain_list/domain_info_widget.dart';
 import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
 
@@ -41,6 +42,21 @@ class _FavoritesViewState extends State<FavoritesView> {
     });
   }
 
+  Future<void> _removeFromFavorites(
+      String domain, AppLocalizations translations) async {
+    await favoritesService.removeFromFavorites(domain);
+
+    Fluttertoast.showToast(
+      msg: translations.translate('Izbrisano iz omiljenog'),
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      textColor: Colors.white,
+      backgroundColor: Colors.grey,
+      fontSize: 16.0,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
@@ -69,8 +85,15 @@ class _FavoritesViewState extends State<FavoritesView> {
                       icon: Icons.star,
                       iconColor: Colors.yellow,
                       date: favoriteList[itemIndex].dateTime,
-                      onCardPressed: () {},
-                      iconOnPressed: () {},
+                      onCardPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DomainDetail(
+                                domain: favoriteList[itemIndex].domainName)));
+                      },
+                      iconOnPressed: () {
+                        _removeFromFavorites(
+                            favoriteList[itemIndex].domainName, translations);
+                      },
                     );
                   },
                 ),
