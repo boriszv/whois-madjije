@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whois_madjije/views/favorites/favorites_view.dart';
 import 'package:whois_madjije/views/history/history_view.dart';
+import 'package:whois_madjije/views/settings/settings.dart';
 
 import '../app_localizations.dart';
 import 'home/home_view.dart';
@@ -118,7 +119,7 @@ class _HomeState extends State<Home> {
                   return MaterialPageRoute(
                     settings: settings,
                     builder: (BuildContext context) {
-                      return Scaffold(body: Text('as4'));
+                      return Settings();
                     },
                   );
                 },
