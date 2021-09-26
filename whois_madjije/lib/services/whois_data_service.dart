@@ -31,7 +31,7 @@ class WhoisDataService implements IWhoisDataService {
 
     final list = <DomainAvailability>[];
     for (final domainName in domains) {
-      final result = await getWhoisData(domain + domainName);
+      final result = await getWhoisData(domain + domainName, writeToHistory: false);
       list.add(DomainAvailability(
         domainName: domain + domainName,
         isRegistered: result.exists,
@@ -42,7 +42,7 @@ class WhoisDataService implements IWhoisDataService {
   }
 
   @override
-  Future<WhoisData> getWhoisData(String domain) async {
+  Future<WhoisData> getWhoisData(String domain, {bool writeToHistory = true}) async {
     final result = await _api.getWhoisData(domain);
 
     final record = result['WhoisRecord'];

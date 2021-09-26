@@ -2,15 +2,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/app_localizations.dart';
-import 'package:whois_madjije/services/favorites_service.dart';
 import 'package:whois_madjije/services/ifavorites_service.dart';
 import 'package:whois_madjije/services/inotifications_service.dart';
 import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
-import 'package:whois_madjije/services/notifications_service.dart';
-import 'package:whois_madjije/services/settings_service.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
 
 class DomainDetail extends StatefulWidget {
 
@@ -236,7 +234,7 @@ class _DomainDetailState extends State<DomainDetail> {
         backgroundColor: Colors.white,
         title: const Text('Domain Detail'),
       ),
-      floatingActionButton: _FloatingButton(
+      floatingActionButton: !loading && data?.exists == true ? _FloatingButton(
         hasNotification: hasNotification,
         isInFavorites: isInFavorites,
         favoriteClicked: () {
@@ -245,12 +243,19 @@ class _DomainDetailState extends State<DomainDetail> {
         notificationClicked: () {
           _notificationClicked();
         },
-      ),
+      ) : null,
     
       body: Builder(
         builder: (context) {
           if (loading) {
             return const Center(child: CircularProgressIndicator());
+          }
+
+          if (data?.exists == false) {
+            return NoDataWidget(
+              text: translations.translate('Ovaj domen nije registrovan'),
+              icon: Icons.language,
+            );
           }
 
           return SingleChildScrollView(
