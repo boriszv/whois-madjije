@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/app_localizations.dart';
 import 'package:whois_madjije/services/isettings_service.dart';
@@ -41,6 +42,8 @@ class _SettingsState extends State<Settings> {
     setState(() {
       this.language = language;
     });
+
+    Phoenix.rebirth(context);
   }
 
   void _updateNotificatonType(NotificationType notificationType) async {
@@ -77,13 +80,13 @@ class _SettingsState extends State<Settings> {
                 _Radio(
                   groupValue: language,
                   onChange: _updateLanguage,
-                  value: 'sr-sp',
+                  value: 'es',
                   label: translations.translate('Cirilica'),
                 ),
                 _Radio(
                   groupValue: language,
                   onChange: _updateLanguage,
-                  value: 'sr',
+                  value: 'en',
                   label: translations.translate('Latinica'),
                 ),
               ],

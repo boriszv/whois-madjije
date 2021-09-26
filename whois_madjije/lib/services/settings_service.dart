@@ -21,7 +21,7 @@ class SettingsService implements ISettingsService {
 
   @override
   Future<String> getLanguage()
-    async => (await SharedPreferences.getInstance()).getString('language') ?? 'sr';
+    async => (await SharedPreferences.getInstance()).getString('language') ?? 'en';
 
   @override
   Future<void> setLanguage(String language) 

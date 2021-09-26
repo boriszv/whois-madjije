@@ -177,7 +177,7 @@ const constructPushNotification = (data: Notification) => {
     token: data.deviceToken!,
     android: {},
     notification: {
-      title: `Domen ${data.domain} je istekao ${data.expirationDateTime}`,
+      title: `Domen ${data.domain} je istekao ${new Date().toLocaleDateString()}`,
       body: 'Kliknite na obavestenje kako biste usli u aplikaciju'
     },
   }

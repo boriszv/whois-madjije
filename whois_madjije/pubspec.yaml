@@ -46,6 +46,7 @@ dependencies:
   path_provider: ^2.0.5
   rxdart: ^0.27.2
   open_file: ^3.2.1
+  flutter_phoenix: ^1.0.0
 
 dev_dependencies:
   flutter_test:

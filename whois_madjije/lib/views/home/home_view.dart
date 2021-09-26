@@ -17,7 +17,7 @@ class HomeView extends StatelessWidget {
     }
 
     if (controller.text.contains(' ')) {
-      showDialog(context: context, builder: (builder) => AlertDialog(
+      showDialog(context: context, builder: (context) => AlertDialog(
         title: Text(translations.translate('Greska')),
         content: Text(translations.translate('Uneti domen nije ispravan')),
         actions: [
