@@ -96,7 +96,7 @@ class _SettingsState extends State<Settings> {
                   title: const Text('Email'),
                   subtitle: notificationSettings?.email != null
                     ? Text(notificationSettings!.email!)
-                    : Container(),
+                    : null,
 
                   contentPadding: const EdgeInsets.all(0),
                   leading: Radio<NotificationType?>(
