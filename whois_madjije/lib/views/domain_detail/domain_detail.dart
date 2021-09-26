@@ -89,14 +89,7 @@ class _DomainDetailState extends State<DomainDetail> {
       setState(() { isInFavorites = true; });
     }
 
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      textColor: Colors.white,
-      fontSize: 16.0
-    );
+    _showToast(message);
   }
 
   Future<void> _notificationClicked() async {
@@ -104,6 +97,12 @@ class _DomainDetailState extends State<DomainDetail> {
 
     if (hasNotification) {
       await notificationsService.cancelNotification(widget.domain);
+
+      if (isInFavorites) {
+        await favoritesService.removeFromFavorites(widget.domain);
+        setState(() { isInFavorites = false; });
+      }
+
       message = 'Podsetnik je otkazan';
       setState(() { hasNotification = false; });
 
@@ -127,19 +126,22 @@ class _DomainDetailState extends State<DomainDetail> {
           : 'email'
       ));
 
+      if (!isInFavorites) {
+        await favoritesService.addFavorite(Favorite(
+          dateTime: DateTime.now(),
+          domainName: widget.domain,
+          registered: data?.exists ?? false,
+        ));
+
+        setState(() { isInFavorites = true; });
+      }
+
       setState(() { hasNotification = true; });
 
       message = 'Podsetnik je dodat';
     }
 
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      textColor: Colors.white,
-      fontSize: 16.0
-    );
+    _showToast(message);
   }
 
   Future<DateTime?> _showDatePicker() async {
@@ -205,6 +207,17 @@ class _DomainDetailState extends State<DomainDetail> {
 
   bool _determineVisiblity(List<String?> values) {
     return values.any((element) => element != null && element.isNotEmpty);
+  }
+
+  void _showToast(String text) {
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      textColor: Colors.white,
+      fontSize: 16.0
+    );
   }
 
   var showGeneralInfo = true;
