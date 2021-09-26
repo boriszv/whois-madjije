@@ -34,8 +34,9 @@ class _SelectNotificationTypeState extends State<SelectNotificationType> {
         TextButton(
           child: const Text('Ok'),
           onPressed: () async {
-            if (notificationSettings?.email == null ||
-                notificationSettings?.email == '') {
+            if ((notificationSettings?.email == null ||
+                    notificationSettings?.email == '') &&
+                notificationType == NotificationType.email) {
               await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
