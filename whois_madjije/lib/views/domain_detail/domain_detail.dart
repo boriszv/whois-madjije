@@ -232,7 +232,7 @@ class _DomainDetailState extends State<DomainDetail> {
       appBar: AppBar(
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.white,
-        title: const Text('Domain Detail'),
+        title: Text(translations.translate('Podaci o domenu')),
       ),
       floatingActionButton: !loading && data?.exists == true ? _FloatingButton(
         hasNotification: hasNotification,
@@ -258,128 +258,129 @@ class _DomainDetailState extends State<DomainDetail> {
             );
           }
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
+          return ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              const SizedBox(height: 10),
 
-                if (showGeneralInfo)
-                  _Card(
-                    title: 'General info',
-                    data: [
-                      {
-                        'key': 'Domain',
-                        'value': data?.domainName,
-                      },
-                      {
-                        'key': 'Created date',
-                        'value': data?.createdDate,
-                      },
-                      {
-                        'key': 'Updated date',
-                        'value': data?.updatedDate,
-                      },
-                      {
-                        'key': 'Expires date',
-                        'value': data?.expiresDate,
-                      },
-                    ],
-                  ),
+              if (showGeneralInfo)
+                _Card(
+                  title: 'General info',
+                  data: [
+                    {
+                      'key': 'Domain',
+                      'value': data?.domainName,
+                    },
+                    {
+                      'key': 'Created date',
+                      'value': data?.createdDate,
+                    },
+                    {
+                      'key': 'Updated date',
+                      'value': data?.updatedDate,
+                    },
+                    {
+                      'key': 'Expires date',
+                      'value': data?.expiresDate,
+                    },
+                  ],
+                ),
 
-                if (showRegistrant)
-                  _Card(
-                    title: 'Registrant',
-                    data: [
-                      {
-                        'key': 'Organization',
-                        'value': data?.registrantOrganization,
-                      },
-                      {
-                        'key': 'State',
-                        'value': data?.registrantState,
-                      },
-                      {
-                        'key': 'Country',
-                        'value': data?.registrantCountry,
-                      },
-                      {
-                        'key': 'Country code',
-                        'value': data?.registrantCountryCode,
-                      },
-                    ],
-                  ),
-                
-                if (showAdministrativeContact)
-                  _Card(
-                    title: 'Administrative contact',
-                    data: [
-                      {
-                        'key': 'Organization',
-                        'value': data?.administrativeContactOrganization,
-                      },
-                      {
-                        'key': 'State',
-                        'value': data?.administrativeContactState,
-                      },
-                      {
-                        'key': 'Country',
-                        'value': data?.administrativeContactCountry,
-                      },
-                      {
-                        'key': 'Country code',
-                        'value': data?.administrativeContactCountryCode,
-                      },
-                    ],
-                  ),
+              if (showRegistrant)
+                _Card(
+                  title: 'Registrant',
+                  data: [
+                    {
+                      'key': 'Organization',
+                      'value': data?.registrantOrganization,
+                    },
+                    {
+                      'key': 'State',
+                      'value': data?.registrantState,
+                    },
+                    {
+                      'key': 'Country',
+                      'value': data?.registrantCountry,
+                    },
+                    {
+                      'key': 'Country code',
+                      'value': data?.registrantCountryCode,
+                    },
+                  ],
+                ),
+              
+              if (showAdministrativeContact)
+                _Card(
+                  title: 'Administrative contact',
+                  data: [
+                    {
+                      'key': 'Organization',
+                      'value': data?.administrativeContactOrganization,
+                    },
+                    {
+                      'key': 'State',
+                      'value': data?.administrativeContactState,
+                    },
+                    {
+                      'key': 'Country',
+                      'value': data?.administrativeContactCountry,
+                    },
+                    {
+                      'key': 'Country code',
+                      'value': data?.administrativeContactCountryCode,
+                    },
+                  ],
+                ),
   
-                if (showTechnicalContact)
-                  _Card(
-                    title: 'Technical contact',
-                    data: [
-                      {
-                        'key': 'Organization',
-                        'value': data?.technicalContactOrganization,
-                      },
-                      {
-                        'key': 'State',
-                        'value': data?.technicalContactState,
-                      },
-                      {
-                        'key': 'Country',
-                        'value': data?.technicalContactCountry,
-                      },
-                      {
-                        'key': 'Country code',
-                        'value': data?.technicalContactCountryCode,
-                      },
-                    ],
-                  ),
+              if (showTechnicalContact)
+                _Card(
+                  title: 'Technical contact',
+                  data: [
+                    {
+                      'key': 'Organization',
+                      'value': data?.technicalContactOrganization,
+                    },
+                    {
+                      'key': 'State',
+                      'value': data?.technicalContactState,
+                    },
+                    {
+                      'key': 'Country',
+                      'value': data?.technicalContactCountry,
+                    },
+                    {
+                      'key': 'Country code',
+                      'value': data?.technicalContactCountryCode,
+                    },
+                  ],
+                ),
 
-                if (showRegistrar)
-                  _Card(
-                    title: 'Registrar',
-                    data: [
-                      {
-                        'key': 'Registrar Name',
-                        'value': data?.registrarName
-                      },
-                      {
-                        'key': 'Registrar IANAID',
-                        'value': data?.registrarIANAID
-                      },
-                    ],
-                  ),
+              if (showRegistrar)
+                _Card(
+                  title: 'Registrar',
+                  data: [
+                    {
+                      'key': 'Registrar Name',
+                      'value': data?.registrarName
+                    },
+                    {
+                      'key': 'Registrar IANAID',
+                      'value': data?.registrarIANAID
+                    },
+                  ],
+                ),
 
-                if (showNameservers)
-                  _Card(
-                    title: 'Nameservers',
-                    data: data?.nameServers.map((e) => {
-                      'key': '',
-                      'value': e
-                    }).toList() ?? [],
-                  ),
-              ],
-            ),
+              if (showNameservers)
+                _Card(
+                  title: 'Nameservers',
+                  data: data?.nameServers.map((e) => {
+                    'key': '',
+                    'value': e
+                  }).toList() ?? [],
+                ),
+           
+              const SizedBox(height: 20),
+            ],
           );
     
         },

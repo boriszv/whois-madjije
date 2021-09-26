@@ -16,8 +16,11 @@ void main() {
     test('google.com', () async {
       final api = MockWhoisApi();
 
-      when(api.getWhoisData(any)) 
+      when(api.getWhoisData(any))
         .thenAnswer((_) async => googleCom);
+
+      when(api.getIps(any))
+        .thenAnswer((_) async => []);
 
       final service = WhoisDataService(api, SearchHistoryService());
 
@@ -51,6 +54,9 @@ void main() {
       when(api.getWhoisData(any)) 
         .thenAnswer((_) async => googleMKD);
 
+      when(api.getIps(any))
+        .thenAnswer((_) async => []);
+
       final service = WhoisDataService(api, SearchHistoryService());
 
       final result = await service.getWhoisData('гугл.мкд');
@@ -80,6 +86,9 @@ void main() {
       when(api.getWhoisData(any)) 
         .thenAnswer((_) async => missingWhoisData);
 
+      when(api.getIps(any))
+        .thenAnswer((_) async => []);
+
       final service = WhoisDataService(api, SearchHistoryService());
 
       final result = await service.getWhoisData('randomdomain.com');
@@ -93,6 +102,9 @@ void main() {
       when(api.getWhoisData(any)) 
         .thenAnswer((_) async => invalidDomainName);
 
+      when(api.getIps(any))
+        .thenAnswer((_) async => []);
+
       final service = WhoisDataService(api, SearchHistoryService());
 
       final result = await service.getWhoisData('invalid domain');
@@ -105,6 +117,9 @@ void main() {
 
       when(api.getWhoisData(any)) 
         .thenAnswer((_) async => invalidDomainName1);
+
+      when(api.getIps(any))
+        .thenAnswer((_) async => []);
 
       final service = WhoisDataService(api, SearchHistoryService());
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:whois_madjije/services/isearch_history_service.dart';
 import 'package:whois_madjije/services/iwhois_api.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
@@ -43,7 +45,15 @@ class WhoisDataService implements IWhoisDataService {
 
   @override
   Future<WhoisData> getWhoisData(String domain, {bool writeToHistory = true}) async {
-    final result = await _api.getWhoisData(domain);
+    final results = await Future.wait([
+      _api.getWhoisData(domain),
+      _api.getIps(domain),
+    ]);
+
+    final result = results[0] as Map<String, dynamic>;
+    final ips = (results[1] as List<InternetAddress>)
+      .map((e) => e.address)
+      .toList();
 
     final record = result['WhoisRecord'];
 
@@ -103,6 +113,8 @@ class WhoisDataService implements IWhoisDataService {
         record['registryData']?['nameServers']?['hostNames'],
         <String>[]
       ]),
+
+      ips: ips,
     );
 
     await _addSearchRecod(domain, true);

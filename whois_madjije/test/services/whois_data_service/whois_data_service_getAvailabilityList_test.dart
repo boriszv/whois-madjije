@@ -19,6 +19,9 @@ void main() {
       when(api.getWhoisData(any)) 
         .thenAnswer((_) async => googleMKD);
 
+      when(api.getIps(any))
+        .thenAnswer((_) async => []);
+
       final service = WhoisDataService(api, SearchHistoryService());
 
       final stream = service.getAvailabilityList('testdomen');

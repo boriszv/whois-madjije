@@ -45,6 +45,7 @@ class WhoisData {
   final String? contactEmail;
 
   final List<String> nameServers;
+  final List<String> ips;
 
   WhoisData({
     required this.exists,
@@ -70,7 +71,9 @@ class WhoisData {
     this.registrarIANAID,
     this.contactEmail,
 
-    this.nameServers = const []});
+    this.nameServers = const [],
+    this.ips = const [],
+  });
 
   factory WhoisData.missingData() {
     return WhoisData(

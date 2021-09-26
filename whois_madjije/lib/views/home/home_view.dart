@@ -9,7 +9,25 @@ class HomeView extends StatelessWidget {
   final controller = TextEditingController();
 
   onSearchClick(BuildContext context) {
+    final translations = AppLocalizations.of(context);
+
     if (controller.text.isEmpty) {
+      return;
+    }
+
+    if (controller.text.contains(' ')) {
+      showDialog(context: context, builder: (builder) => AlertDialog(
+        title: Text(translations.translate('Greska')),
+        content: Text(translations.translate('Uneti domen nije ispravan')),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(translations.translate('Ok')),
+          )
+        ],
+      ));
       return;
     }
 

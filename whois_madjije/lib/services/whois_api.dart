@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:whois_madjije/services/iwhois_api.dart';
@@ -16,5 +17,16 @@ class WhoisApi implements IWhoisApi {
     }
 
     return json.decode(response.body);
+  }
+
+  @override
+  Future<List<InternetAddress>> getIps(String? domain) {
+    if (domain == null) {
+      return Future.value([]);
+    }
+
+    return InternetAddress.lookup(domain).catchError((error) async {
+      return <InternetAddress>[];
+    });
   }
 }
