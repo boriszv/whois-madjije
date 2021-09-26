@@ -7,7 +7,7 @@ class WhoisApi implements IWhoisApi {
 
   @override
   Future<Map<String, dynamic>> getWhoisData(String domain) async {
-    final url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_Fd3Ta0e5dec7iDniDfByFf9Cx5nUT&domainName=$domain&outputFormat=JSON';
+    final url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_O4bYh0lgE9khjzccJBtA2VJwMWlP9&domainName=$domain&outputFormat=JSON';
 
     final response = await http.get(Uri.parse(url));
 
