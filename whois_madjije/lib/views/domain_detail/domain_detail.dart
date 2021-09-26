@@ -73,6 +73,12 @@ class _DomainDetailState extends State<DomainDetail> {
 
     if (isInFavorites) {
       await favoritesService.removeFromFavorites(widget.domain);
+
+      if (hasNotification) {
+        await notificationsService.cancelNotification(widget.domain);
+        setState(() { hasNotification = false; });
+      }
+
       setState(() { isInFavorites = false; });
       message = 'Izbrisano iz omiljenog';
 
@@ -95,11 +101,6 @@ class _DomainDetailState extends State<DomainDetail> {
 
     if (hasNotification) {
       await notificationsService.cancelNotification(widget.domain);
-
-      if (isInFavorites) {
-        await favoritesService.removeFromFavorites(widget.domain);
-        setState(() { isInFavorites = false; });
-      }
 
       message = 'Podsetnik je otkazan';
       setState(() { hasNotification = false; });
@@ -201,6 +202,7 @@ class _DomainDetailState extends State<DomainDetail> {
     ]);
 
     showNameservers = data!.nameServers.isNotEmpty;
+    showIps = data!.ips.isNotEmpty;
   }
 
   bool _determineVisiblity(List<String?> values) {
@@ -224,6 +226,7 @@ class _DomainDetailState extends State<DomainDetail> {
   var showTechnicalContact = true;
   var showRegistrar = true;
   var showNameservers = true;
+  var showIps = true;
 
   @override
   Widget build(BuildContext context) {
@@ -379,6 +382,15 @@ class _DomainDetailState extends State<DomainDetail> {
                   }).toList() ?? [],
                 ),
            
+              if (showIps)
+                _Card(
+                  title: 'Ip adrese',
+                  data: data?.ips.map((e) => {
+                    'key': '',
+                    'value': e
+                  }).toList() ?? [],
+                ),
+
               const SizedBox(height: 20),
             ],
           );
@@ -488,11 +500,14 @@ class _Card extends StatelessWidget {
 
               ...data.map((e) {
 
-                if (e['key']?.isNotEmpty == true) {
-                  e['key'] = e['key']! + ': ';
+                var key = e['key'];
+                final value = e['value'];
+
+                if (key?.isNotEmpty == true) {
+                  key = key! + ': ';
                 }
 
-                if (e['value'] == null) {
+                if (value == null) {
                   return Container();
                 }
 
@@ -502,14 +517,14 @@ class _Card extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: RichText(
                       text: TextSpan(
-                        text: e['key'],
+                        text: key,
                         style: Theme.of(context).textTheme.subtitle1?.apply(
                           color: Theme.of(context).primaryColor,
                           fontWeightDelta: 1
                         ),
                         children: [
                           TextSpan(
-                            text: e['value'],
+                            text: value,
                             style: Theme.of(context).textTheme.bodyText1?.apply(
                               fontWeightDelta: -1
                             )
