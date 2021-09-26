@@ -43,16 +43,10 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       onWillPop: null,
       child: Scaffold(
-        backgroundColor:
-            _index == 0 ? const Color.fromARGB(255, 22, 93, 187) : null,
         bottomNavigationBar: Container(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(14),
-              topRight: Radius.circular(14),
-            ),
             boxShadow: [
               BoxShadow(
                 offset: Offset.fromDirection(-5, 4),
