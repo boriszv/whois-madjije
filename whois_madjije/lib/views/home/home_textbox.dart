@@ -42,6 +42,7 @@ class HomeTextbox extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: -2,
+            height: 74,
             child: ElevatedButton(
               onPressed: () {
                 onSubmit();

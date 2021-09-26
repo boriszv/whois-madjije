@@ -110,7 +110,7 @@ class DomainInfo extends StatelessWidget {
                 if (isHistoryIconShown != null && isHistoryIconShown == true)
                   Positioned(
                     right: 45,
-                    bottom: 7,
+                    bottom: 12,
                     child: Icon(
                       Icons.history,
                       size: 65,
