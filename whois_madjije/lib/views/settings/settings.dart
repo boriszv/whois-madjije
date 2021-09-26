@@ -61,6 +61,7 @@ class _SettingsState extends State<Settings> {
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.white,
         title: Text(translations.translate('Podesavanja')),
+        centerTitle: true,
       ),
       body: ListView(
         children: [
