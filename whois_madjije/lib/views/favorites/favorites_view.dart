@@ -6,6 +6,7 @@ import 'package:whois_madjije/services/ifavorites_service.dart';
 import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
 import 'package:whois_madjije/views/domain_list/domain_info_widget.dart';
 import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
+import 'package:whois_madjije/views/sharedWidgets/yes_no_dialog.dart';
 
 import '../../app_localizations.dart';
 
@@ -92,8 +93,19 @@ class _FavoritesViewState extends State<FavoritesView> {
                                 domain: favoriteList[itemIndex].domainName)));
                       },
                       iconOnPressed: () {
-                        _removeFromFavorites(
-                            favoriteList[itemIndex].domainName, translations);
+                        showDialog(
+                          context: context,
+                          builder: (_) => YesNoDialog(
+                            text: translations.translate(
+                                'Ova akcija ce obrisati selektovani domen iz omiljenih'),
+                            onProceed: () {
+                              _removeFromFavorites(
+                                favoriteList[itemIndex].domainName,
+                                translations,
+                              );
+                            },
+                          ),
+                        );
                       },
                     );
                   },
