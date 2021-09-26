@@ -29,6 +29,9 @@ class Favorite {
 }
 
 abstract class IFavoritesService {
+
+  abstract Stream<bool> updated$;
+
   Future<List<Favorite>> getFavorites();
   Future<Favorite?> getFavorite(String domain);
   Future<void> addFavorite(Favorite favorite);

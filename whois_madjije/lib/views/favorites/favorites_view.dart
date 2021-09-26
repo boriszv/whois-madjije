@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/ifavorites_service.dart';
 import 'package:whois_madjije/views/domain_list/domain_info_widget.dart';
-import 'package:whois_madjije/views/sharedWidgets/loading_widget.dart';
 import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
 
 import '../../app_localizations.dart';
@@ -26,6 +25,14 @@ class _FavoritesViewState extends State<FavoritesView> {
   void initState() {
     super.initState();
 
+    favoritesService.updated$.listen((event) {
+      _fetchFavorites();
+    });
+
+    _fetchFavorites();
+  }
+
+  void _fetchFavorites() {
     favoritesService.getFavorites().then((result) {
       setState(() {
         favoriteList = result;

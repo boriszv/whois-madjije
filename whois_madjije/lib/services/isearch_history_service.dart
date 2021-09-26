@@ -28,6 +28,9 @@ class SearchHistoryRecord {
 }
 
 abstract class ISearchHistoryService {
+
+  abstract Stream<bool> updated$;
+
   Future<List<SearchHistoryRecord>> getSearchHistory();
   Future<void> addSearchRecord(SearchHistoryRecord record);
 }

@@ -15,7 +15,7 @@ import 'package:whois_madjije/services/whois_data_service.dart';
 void setupDependencyInjection() {
   GetIt.I.registerFactory<IWhoisApi>(() => WhoisApi());
   
-  GetIt.I.registerFactory<ISearchHistoryService>(() => SearchHistoryService());
+  GetIt.I.registerLazySingleton<ISearchHistoryService>(() => SearchHistoryService());
 
   GetIt.I.registerFactory<IWhoisDataService>(() =>
     WhoisDataService(
@@ -30,5 +30,5 @@ void setupDependencyInjection() {
       GetIt.I<ISettingsService>(),
     ));
 
-  GetIt.I.registerFactory<IFavoritesService>(() => FavoritesService());
+  GetIt.I.registerLazySingleton<IFavoritesService>(() => FavoritesService());
 }

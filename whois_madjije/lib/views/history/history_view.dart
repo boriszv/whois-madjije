@@ -24,6 +24,14 @@ class _HistoryViewState extends State<HistoryView> {
   void initState() {
     super.initState();
 
+    searchHistoryService.updated$.listen((event) {
+      _fetchHistory();
+    });
+
+    _fetchHistory();
+  }
+
+  void _fetchHistory() {
     searchHistoryService.getSearchHistory().then((result) {
       setState(() {
         searchHistoryRecordList = result;

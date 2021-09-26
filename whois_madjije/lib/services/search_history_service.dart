@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,6 +11,11 @@ enum SearchHistoryDatabaseProvider {
 }
 
 class SearchHistoryService implements ISearchHistoryService {
+
+  @override
+  late Stream<bool> updated$ = _updated.stream;
+
+  final _updated = StreamController<bool>.broadcast();
 
   @override
   Future<List<SearchHistoryRecord>> getSearchHistory() async {
@@ -50,6 +56,7 @@ class SearchHistoryService implements ISearchHistoryService {
     }
 
     await prefs.setString('search_history', json.encode(jsonData));
+    _updated.add(true);
   }
 
   List<SearchHistoryRecord> _parseList(List<dynamic> jsonData) {

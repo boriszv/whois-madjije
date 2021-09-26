@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -11,6 +12,11 @@ enum FavoritesDatabaseProvider {
 }
 
 class FavoritesService implements IFavoritesService {
+
+  @override
+  late Stream<bool> updated$ = _updated.stream;
+
+  final _updated = StreamController<bool>.broadcast();
 
   @override
   Future<List<Favorite>> getFavorites() async {
@@ -63,17 +69,10 @@ class FavoritesService implements IFavoritesService {
     }
 
     await prefs.setString('favorites', json.encode(jsonData));
+
+    _updated.add(true);
   }
 
-  List<Favorite> _parseList(List<dynamic> jsonData) {
-    return jsonData
-      .map((x) => Favorite(
-        domainName: x['domainName'],
-        dateTime: DateTime.parse(x['dateTime']),
-        registered: x['registered'],
-      ))
-      .toList();
-  }
 
   @override
   Future<void> removeFromFavorites(String domain) async {
@@ -85,5 +84,17 @@ class FavoritesService implements IFavoritesService {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('favorites', json.encode(jsonData));
+
+    _updated.add(true);
+  }
+
+  List<Favorite> _parseList(List<dynamic> jsonData) {
+    return jsonData
+      .map((x) => Favorite(
+        domainName: x['domainName'],
+        dateTime: DateTime.parse(x['dateTime']),
+        registered: x['registered'],
+      ))
+      .toList();
   }
 }
