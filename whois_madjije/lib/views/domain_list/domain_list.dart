@@ -50,6 +50,7 @@ class _DomainListState extends State<DomainList> {
         elevation: 3,
       ),
       body: ListView.builder(
+        physics: const BouncingScrollPhysics(),
         itemCount: domainAvailabilityList.length + 1,
         itemBuilder: (context, itemIndex) {
           return itemIndex < domainAvailabilityList.length

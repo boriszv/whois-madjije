@@ -64,6 +64,7 @@ class _SettingsState extends State<Settings> {
         centerTitle: true,
       ),
       body: ListView(
+        physics: const BouncingScrollPhysics(),
         children: [
           const SizedBox(height: 10),
           _Card(
