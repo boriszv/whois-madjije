@@ -50,4 +50,36 @@ class SettingsService implements ISettingsService {
       'email': settings.email,
       'type': settings.type.index,
     }));
+
+  @override
+  Future<List<String>> getSavedDomainsList() async {
+    final data = (await SharedPreferences.getInstance()).getString('saved_domains');
+    if (data == null || data.isEmpty) {
+      return defaultDomains;
+    }
+
+    return (json.decode(data) as List<dynamic>).cast<String>();
+  }
+
+  @override
+  Future<void> updateSavedDomains(List<String> domains)
+    async => (await SharedPreferences.getInstance()).setString('saved_domains', json.encode(domains));
 }
+
+const defaultDomains = [
+  '.rs',
+  '.срб',
+  '.ru',
+  '.рф',
+  '.mk',
+  '.мкд',
+  '.org',
+  '.орг',
+  '.com',
+  '.ком',
+  '.net',
+  '.uk',
+  '.se',
+  '.io',
+  '.gov'
+];

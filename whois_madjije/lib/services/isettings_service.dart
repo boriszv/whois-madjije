@@ -24,4 +24,7 @@ abstract class ISettingsService {
 
   Future<bool> getDarkMode();
   Future<void> setDarkMode(bool darkMode);
+
+  Future<List<String>> getSavedDomainsList();
+  Future<void> updateSavedDomains(List<String> domains);
 }
