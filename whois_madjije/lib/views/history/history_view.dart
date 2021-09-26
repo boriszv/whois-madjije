@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/isearch_history_service.dart';
 import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
 import 'package:whois_madjije/views/domain_list/domain_info_widget.dart';
-import 'package:whois_madjije/views/sharedWidgets/loading_widget.dart';
+import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
 
 import '../../app_localizations.dart';
 
@@ -52,25 +52,33 @@ class _HistoryViewState extends State<HistoryView> {
         centerTitle: true,
         elevation: 3,
       ),
-      body: ListView.builder(
-        itemCount: searchHistoryRecordList.length + 1,
-        itemBuilder: (context, itemIndex) {
-          return itemIndex < searchHistoryRecordList.length
-              ? DomainInfo(
-                  domainName: searchHistoryRecordList[itemIndex].domainName,
-                  isRegistered: searchHistoryRecordList[itemIndex].isRegistered,
-                  icon: Icons.chevron_right,
-                  iconColor: Colors.black,
-                  date: searchHistoryRecordList[itemIndex].dateTime,
-                  isHistoryIconShown: true,
-                  onCardPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
-                      DomainDetail(domain: searchHistoryRecordList[itemIndex].domainName)));
-                  },
+      body: isLoading
+          ? const CircularProgressIndicator()
+          : searchHistoryRecordList.isEmpty
+              ? NoDataWidget(
+                  text: translations.translate('Istorija je prazna'),
+                  icon: Icons.history,
                 )
-              : LoadingIndicator(isLoading: isLoading);
-        },
-      ),
+              : ListView.builder(
+                  itemCount: searchHistoryRecordList.length,
+                  itemBuilder: (context, itemIndex) {
+                    return DomainInfo(
+                      domainName: searchHistoryRecordList[itemIndex].domainName,
+                      isRegistered:
+                          searchHistoryRecordList[itemIndex].isRegistered,
+                      icon: Icons.chevron_right,
+                      iconColor: Colors.black,
+                      date: searchHistoryRecordList[itemIndex].dateTime,
+                      isHistoryIconShown: true,
+                      onCardPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => DomainDetail(
+                                domain: searchHistoryRecordList[itemIndex]
+                                    .domainName)));
+                      },
+                    );
+                  },
+                ),
     );
   }
 }

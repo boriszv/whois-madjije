@@ -15,6 +15,7 @@ class NoDataWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 27),
       height: double.infinity,
+      width: double.infinity,
       child: Stack(
         alignment: Alignment.center,
         children: [
