@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
+import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
 import 'package:whois_madjije/views/sharedWidgets/loading_widget.dart';
 
 import '../../app_localizations.dart';
@@ -57,7 +58,11 @@ class _DomainListState extends State<DomainList> {
                   isRegistered: domainAvailabilityList[itemIndex].isRegistered,
                   icon: Icons.chevron_right,
                   iconColor: Colors.black,
-                  onCardPressed: () {},
+                  onCardPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => DomainDetail(
+                            domain: domainAvailabilityList[itemIndex].domainName)));
+                  },
                 )
               : LoadingIndicator(isLoading: isLoading);
         },
