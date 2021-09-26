@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/ifavorites_service.dart';
 import 'package:whois_madjije/views/domain_list/domain_info_widget.dart';
 import 'package:whois_madjije/views/sharedWidgets/loading_widget.dart';
+import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
 
 import '../../app_localizations.dart';
 
@@ -43,22 +46,27 @@ class _FavoritesViewState extends State<FavoritesView> {
         centerTitle: true,
         elevation: 3,
       ),
-      body: ListView.builder(
-        itemCount: favoriteList.length + 1,
-        itemBuilder: (context, itemIndex) {
-          return itemIndex < favoriteList.length
-              ? DomainInfo(
-                  domainName: favoriteList[itemIndex].domainName,
-                  isRegistered: favoriteList[itemIndex].registered,
+      body: isLoading
+          ? const CircularProgressIndicator()
+          : favoriteList.isEmpty
+              ? NoDataWidget(
+                  text: translations.translate('Nema omiljenih domena'),
                   icon: Icons.star,
-                  iconColor: Colors.yellow,
-                  date: favoriteList[itemIndex].dateTime,
-                  onCardPressed: () {},
-                  iconOnPressed: () {},
                 )
-              : LoadingIndicator(isLoading: isLoading);
-        },
-      ),
+              : ListView.builder(
+                  itemCount: favoriteList.length,
+                  itemBuilder: (context, itemIndex) {
+                    return DomainInfo(
+                      domainName: favoriteList[itemIndex].domainName,
+                      isRegistered: favoriteList[itemIndex].registered,
+                      icon: Icons.star,
+                      iconColor: Colors.yellow,
+                      date: favoriteList[itemIndex].dateTime,
+                      onCardPressed: () {},
+                      iconOnPressed: () {},
+                    );
+                  },
+                ),
     );
   }
 }
