@@ -13,8 +13,9 @@ import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:whois_madjije/views/domain_detail/select_notification_type.dart';
 import 'package:whois_madjije/views/sharedWidgets/no_data_widget.dart';
-import 'package:open_file/open_file.dart';
+// import 'package:open_file/open_file.dart';
 
 class DomainDetail extends StatefulWidget {
   final String domain;
@@ -115,6 +116,7 @@ class _DomainDetailState extends State<DomainDetail> {
       setState(() {
         hasNotification = false;
       });
+
     } else {
       final notificationSettings =
           await settingsService.getNotificationSettings();
@@ -126,12 +128,19 @@ class _DomainDetailState extends State<DomainDetail> {
         return;
       }
 
+      final NotificationType? notificationType
+        = await showDialog(context: context, builder: (context) => SelectNotificationType());
+
+      if (notificationType == null) {
+        return;
+      }
+
       await notificationsService.addNotification(WhoisNotification(
           deviceToken: (await FirebaseMessaging.instance.getToken())!,
           domain: widget.domain,
           expirationDateTime: dateTime.toIso8601String(),
           status: 'queued',
-          type: notificationSettings.type == NotificationType.push
+          type: notificationType == NotificationType.push
               ? 'push'
               : 'email'));
 
@@ -437,7 +446,7 @@ class _FloatingButton extends StatelessWidget {
     final file = File("${tmpDir.path}/example.pdf");
     await file.writeAsBytes(await pdf.save());
 
-    OpenFile.open(file.path);
+    // OpenFile.open(file.path);
 
     Fluttertoast.showToast(
         msg: 'Done',
