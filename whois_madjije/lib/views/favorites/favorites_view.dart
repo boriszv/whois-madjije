@@ -78,6 +78,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                   icon: Icons.star,
                 )
               : ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 20),
                   itemCount: favoriteList.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, itemIndex) {
