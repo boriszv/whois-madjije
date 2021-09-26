@@ -4,6 +4,7 @@ import * as admin from "firebase-admin";
 import { EventContext } from "firebase-functions";
 import * as sendgrid from '@sendgrid/mail';
 import { MailDataRequired } from "@sendgrid/mail";
+import { generateEmail } from "./email";
 
 admin.initializeApp();
 
@@ -108,7 +109,7 @@ const sendNotifications = async (context?: EventContext) => {
             from: 'whois-madjije@prioritysoft.io',
             subject: `Upozorenje: domen ${notification.domain} je istekao`,
             text: 'ripcic',
-            html: '<strong>ripcic</strong>',
+            html: generateEmail(notification.domain, new Date(notification.expirationDateTime).toLocaleDateString()),
 
           } as MailDataRequired);
 

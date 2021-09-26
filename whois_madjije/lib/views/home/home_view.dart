@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whois_madjije/views/domain_detail/domain_detail.dart';
 import 'package:whois_madjije/views/domain_list/domain_list.dart';
+import 'package:whois_madjije/views/home/domain_options.dart';
 import '../../app_localizations.dart';
 import 'home_textbox.dart';
 
@@ -104,7 +105,7 @@ class HomeView extends StatelessWidget {
                 width: 130,
                 child: ElevatedButton(
                   onPressed: () {
-                    onSearchClick(context);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => DomainOptions()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
