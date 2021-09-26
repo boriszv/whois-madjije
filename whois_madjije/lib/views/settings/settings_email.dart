@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:whois_madjije/app_localizations.dart';
 
 class SettingsEmail extends StatefulWidget {
-
   final String? email;
 
-  SettingsEmail({
+  const SettingsEmail({
+    Key? key,
     required this.email,
-  });
+  }) : super(key: key);
 
   @override
   State<SettingsEmail> createState() => _SettingsEmailState();
 }
 
 class _SettingsEmailState extends State<SettingsEmail> {
-
   @override
   void initState() {
     _controller.text = widget.email ?? '';
@@ -39,15 +38,16 @@ class _SettingsEmailState extends State<SettingsEmail> {
                 child: TextField(
                   autofocus: true,
                   controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'something@example.com'
-                  ),
+                  decoration:
+                      const InputDecoration(hintText: 'something@example.com'),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.person, color: Theme.of(context).primaryColor.withOpacity(0.1), size: 90)
+                  Icon(Icons.person,
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      size: 90)
                 ],
               )
             ],
@@ -62,9 +62,7 @@ class _SettingsEmailState extends State<SettingsEmail> {
           },
           child: Text(
             translations.translate('Otkazi'),
-            style: TextStyle(
-              color: Colors.black54
-            ),
+            style: const TextStyle(color: Colors.black54),
           ),
         ),
         TextButton(
