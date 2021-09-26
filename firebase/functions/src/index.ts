@@ -21,8 +21,16 @@ interface Notification {
 }
 
 const deviceToken = 'cc6Qo3nzS96lG8oKu3w3ly:APA91bHjGupbyL-fYGEGbqWmRNj5y0zsCMAPXj9MT1jkc8BR3V-YI7A_Uku77JUMdt8qqeWHi2VDKx7imSdVN-mfgvCmFu6zCFY0clsfEOh7tftkNgp0LUcVb391PflwBVAXCK8UHa3g';
-const email = 'boriszivk@gmail.com'
-const email2 = 'lukastajcic@gmail.com'
+
+const emails = [
+  'boriszivk@gmail.com',
+  'lukastajcic@gmail.com',
+  'lspdmichael12@gmail.com',
+
+  'petar@quantox.com',
+  'damjan.tomic@itbiz.rs',
+  'stojicevic@gransy.com',
+];
 
 const dataToSeed: Notification[] = [
   {
@@ -39,20 +47,15 @@ const dataToSeed: Notification[] = [
     expirationDateTime: new Date().toISOString(),
     status: 'queued'
   },
-  {
-    type: 'email',
-    email: email,
-    domain: 'prioritysoft.rs',
-    expirationDateTime: new Date().toISOString(),
-    status: 'queued'
-  },
-  {
-    type: 'email',
-    email: email2,
-    domain: 'prioritysoft.io',
-    expirationDateTime: new Date().toISOString(),
-    status: 'queued'
-  },
+  ...emails.map(email => {
+    return {
+      type: 'email',
+      email: email,
+      domain: 'prioritysoft.io',
+      expirationDateTime: new Date().toISOString(),
+      status: 'queued'
+    } as Notification;
+  }),
 ];
 
 export const seedData = functions.https.onRequest(async (req, res) => {
@@ -120,9 +123,7 @@ const sendNotifications = async (context?: EventContext) => {
           break;
 
         case 'push':
-          console.log('push notif')
           const data = notificationDoc.data() as Notification;
-          console.log(data.deviceToken)
 
           if (!data.deviceToken)
             continue;
@@ -130,14 +131,12 @@ const sendNotifications = async (context?: EventContext) => {
           pushNotificationsToSend.push(constructPushNotification(data));
           pushNotificationDocumentsToUpdate.push(notificationDoc);
 
-          console.log(constructPushNotification(data));
 
           break;
       }
     }
 
     if (pushNotificationsToSend.length > 0) {
-      console.log('sending messages')
       await messaging.sendAll(pushNotificationsToSend);
 
       for (const notification of pushNotificationDocumentsToUpdate) {
@@ -155,7 +154,6 @@ const sendNotifications = async (context?: EventContext) => {
     }
     // res.send(200);
   } catch (e) {
-    console.log(e);
   }
 };
 
