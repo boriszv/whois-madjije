@@ -10,12 +10,17 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const SizedBox(
+    if (isLoading) {
+      return Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(20.0),
             child: CircularProgressIndicator(),
-            height: 50,
-            width: 50,
-          )
-        : const SizedBox(height: 20);
+          ),
+        ],
+      );
+    }
+
+    return const SizedBox(height: 20);
   }
 }
