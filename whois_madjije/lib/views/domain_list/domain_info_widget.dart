@@ -34,10 +34,10 @@ class DomainInfo extends StatelessWidget {
         onTap: () {
           onCardPressed();
         },
-        child: Container(
+        child: Ink(
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
             boxShadow: [
               BoxShadow(
                 offset: Offset.fromDirection(-6, 4),
