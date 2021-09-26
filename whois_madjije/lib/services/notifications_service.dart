@@ -25,7 +25,7 @@ class NotificationsService implements INotificationsService {
 
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
-      final pushNotifications = await baseQuery.where('token', isEqualTo: token).get();
+      final pushNotifications = await baseQuery.where('deviceToken', isEqualTo: token).get();
       if (pushNotifications.docs.isNotEmpty) {
         return WhoisNotification.fromJson(pushNotifications.docs.first.data());
       }
@@ -49,7 +49,7 @@ class NotificationsService implements INotificationsService {
 
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
-      final pushNotifications = await baseQuery.where('token', isEqualTo: token).get();
+      final pushNotifications = await baseQuery.where('deviceToken', isEqualTo: token).get();
       if (pushNotifications.docs.isNotEmpty) {
         await _cancelQueuedNotifications(pushNotifications);
       }

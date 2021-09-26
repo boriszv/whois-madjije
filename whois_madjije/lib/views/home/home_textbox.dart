@@ -26,6 +26,7 @@ class HomeTextbox extends StatelessWidget {
       child: Stack(
         children: [
           TextField(
+            autofocus: false,
             controller: controller,
             keyboardType: TextInputType.url,
             decoration: InputDecoration(
