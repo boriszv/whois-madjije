@@ -19,7 +19,10 @@ class NotificationsService implements INotificationsService {
     if (email != null) {
       final emailNotifications = await baseQuery.where('email', isEqualTo: email).get();
       if (emailNotifications.docs.isNotEmpty) {
-        return WhoisNotification.fromJson(emailNotifications.docs.first.data());
+        final data = WhoisNotification.fromJson(emailNotifications.docs.first.data());
+        if (data.status == 'cancelled') {
+          return null;
+        }
       }
     }
 
@@ -27,7 +30,10 @@ class NotificationsService implements INotificationsService {
     if (token != null) {
       final pushNotifications = await baseQuery.where('deviceToken', isEqualTo: token).get();
       if (pushNotifications.docs.isNotEmpty) {
-        return WhoisNotification.fromJson(pushNotifications.docs.first.data());
+        final data = WhoisNotification.fromJson(pushNotifications.docs.first.data());
+        if (data.status == 'cancelled') {
+          return null;
+        }
       }
     }
 
