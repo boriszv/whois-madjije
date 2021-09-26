@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
+import 'package:whois_madjije/views/sharedWidgets/loading_widget.dart';
 
 import '../../app_localizations.dart';
 import 'domain_info_widget.dart';
@@ -44,6 +45,7 @@ class _DomainListState extends State<DomainList> {
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.white,
         title: Text(translations.translate('Domeni')),
+        centerTitle: true,
         elevation: 3,
       ),
       body: ListView.builder(
@@ -57,13 +59,7 @@ class _DomainListState extends State<DomainList> {
                   iconColor: Colors.black,
                   onCardPressed: () {},
                 )
-              : isLoading
-                  ? const SizedBox(
-                      child: CircularProgressIndicator(),
-                      height: 50,
-                      width: 50,
-                    )
-                  : const SizedBox(height: 20);
+              : LoadingIndicator(isLoading: isLoading);
         },
       ),
     );
