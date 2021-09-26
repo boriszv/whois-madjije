@@ -72,6 +72,7 @@ class NotificationsService implements INotificationsService {
       'domain': notification.domain,
       'expirationDateTime': notification.expirationDateTime,
       'status': notification.status,
+      'email': notification.email,
     });
   }
 
