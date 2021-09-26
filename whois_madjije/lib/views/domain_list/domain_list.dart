@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 
-import 'registration_status.dart';
+import '../../app_localizations.dart';
+import 'domain_info_widget.dart';
 
 class DomainList extends StatefulWidget {
   final String domain;
@@ -36,19 +37,25 @@ class _DomainListState extends State<DomainList> {
 
   @override
   Widget build(BuildContext context) {
+    final translations = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.white,
-        title: const Text('Domeni'),
+        title: Text(translations.translate('Domeni')),
         elevation: 3,
       ),
       body: ListView.builder(
         itemCount: domainAvailabilityList.length + 1,
         itemBuilder: (context, itemIndex) {
           return itemIndex < domainAvailabilityList.length
-              ? RegistrationStatus(
-                  domainAvailability: domainAvailabilityList[itemIndex],
+              ? DomainInfo(
+                  domainName: domainAvailabilityList[itemIndex].domainName,
+                  isRegistered: domainAvailabilityList[itemIndex].isRegistered,
+                  icon: Icons.chevron_right,
+                  iconColor: Colors.black,
+                  onCardPressed: () {},
                 )
               : isLoading
                   ? const SizedBox(
