@@ -61,6 +61,7 @@ class _DomainDetailState extends State<DomainDetail> {
       whoisDataService.getWhoisData(widget.domain).then((value) {
         setState(() {
           data = value;
+          _setUpVisiblity();
         });
       }),
 
@@ -165,6 +166,54 @@ class _DomainDetailState extends State<DomainDetail> {
     );
   }
 
+  void _setUpVisiblity() {
+    showGeneralInfo = _determineVisiblity([
+      data?.domainName,
+      data?.createdDate,
+      data?.updatedDate,
+      data?.expiresDate,
+    ]);
+
+    showRegistrant = _determineVisiblity([
+      data?.registrantOrganization,
+      data?.registrantState,
+      data?.registrantCountry,
+      data?.registrantCountryCode,
+    ]);
+
+    showAdministrativeContact= _determineVisiblity([
+      data?.administrativeContactOrganization,
+      data?.administrativeContactState,
+      data?.administrativeContactCountry,
+      data?.administrativeContactCountryCode,
+    ]);
+
+    showTechnicalContact = _determineVisiblity([
+      data?.technicalContactOrganization,
+      data?.technicalContactState,
+      data?.technicalContactCountry,
+      data?.technicalContactCountryCode,
+    ]);
+    
+    showRegistrar = _determineVisiblity([
+      data?.registrarName,
+      data?.registrarIANAID,
+    ]);
+
+    showNameservers = data!.nameServers.isNotEmpty;
+  }
+
+  bool _determineVisiblity(List<String?> values) {
+    return values.any((element) => element != null && element.isNotEmpty);
+  }
+
+  var showGeneralInfo = true;
+  var showRegistrant = true;
+  var showAdministrativeContact = true;
+  var showTechnicalContact = true;
+  var showRegistrar = true;
+  var showNameservers = true;
+
   @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
@@ -196,115 +245,121 @@ class _DomainDetailState extends State<DomainDetail> {
               children: [
                 const SizedBox(height: 10),
 
-                _Card(
-                  title: 'General info',
-                  data: [
-                    {
-                      'key': 'Domain',
-                      'value': data?.domainName ?? '',
-                    },
-                    {
-                      'key': 'Created date',
-                      'value': data?.createdDate ?? '',
-                    },
-                    {
-                      'key': 'Updated date',
-                      'value': data?.updatedDate ?? '',
-                    },
-                    {
-                      'key': 'Expires date',
-                      'value': data?.expiresDate ?? '',
-                    },
-                  ],
-                ),
+                if (showGeneralInfo)
+                  _Card(
+                    title: 'General info',
+                    data: [
+                      {
+                        'key': 'Domain',
+                        'value': data?.domainName,
+                      },
+                      {
+                        'key': 'Created date',
+                        'value': data?.createdDate,
+                      },
+                      {
+                        'key': 'Updated date',
+                        'value': data?.updatedDate,
+                      },
+                      {
+                        'key': 'Expires date',
+                        'value': data?.expiresDate,
+                      },
+                    ],
+                  ),
 
-                _Card(
-                  title: 'Registrant',
-                  data: [
-                    {
-                      'key': 'Organization',
-                      'value': data?.registrantOrganization ?? '',
-                    },
-                    {
-                      'key': 'State',
-                      'value': data?.registrantState ?? '',
-                    },
-                    {
-                      'key': 'Country',
-                      'value': data?.registrantCountry ?? '',
-                    },
-                    {
-                      'key': 'Country code',
-                      'value': data?.registrantCountryCode ?? '',
-                    },
-                  ],
-                ),
+                if (showRegistrant)
+                  _Card(
+                    title: 'Registrant',
+                    data: [
+                      {
+                        'key': 'Organization',
+                        'value': data?.registrantOrganization,
+                      },
+                      {
+                        'key': 'State',
+                        'value': data?.registrantState,
+                      },
+                      {
+                        'key': 'Country',
+                        'value': data?.registrantCountry,
+                      },
+                      {
+                        'key': 'Country code',
+                        'value': data?.registrantCountryCode,
+                      },
+                    ],
+                  ),
                 
-                _Card(
-                  title: 'Administrative contact',
-                  data: [
-                    {
-                      'key': 'Organization',
-                      'value': data?.administrativeContactOrganization ?? '',
-                    },
-                    {
-                      'key': 'State',
-                      'value': data?.administrativeContactState ?? '',
-                    },
-                    {
-                      'key': 'Country',
-                      'value': data?.administrativeContactCountry ?? '',
-                    },
-                    {
-                      'key': 'Country code',
-                      'value': data?.administrativeContactCountryCode ?? '',
-                    },
-                  ],
-                ),
-                
-                _Card(
-                  title: 'Technical contact',
-                  data: [
-                    {
-                      'key': 'Organization',
-                      'value': data?.technicalContactOrganization ?? '',
-                    },
-                    {
-                      'key': 'State',
-                      'value': data?.technicalContactState ?? '',
-                    },
-                    {
-                      'key': 'Country',
-                      'value': data?.technicalContactCountry ?? '',
-                    },
-                    {
-                      'key': 'Country code',
-                      'value': data?.technicalContactCountryCode ?? '',
-                    },
-                  ],
-                ),
+                if (showAdministrativeContact)
+                  _Card(
+                    title: 'Administrative contact',
+                    data: [
+                      {
+                        'key': 'Organization',
+                        'value': data?.administrativeContactOrganization,
+                      },
+                      {
+                        'key': 'State',
+                        'value': data?.administrativeContactState,
+                      },
+                      {
+                        'key': 'Country',
+                        'value': data?.administrativeContactCountry,
+                      },
+                      {
+                        'key': 'Country code',
+                        'value': data?.administrativeContactCountryCode,
+                      },
+                    ],
+                  ),
+  
+                if (showTechnicalContact)
+                  _Card(
+                    title: 'Technical contact',
+                    data: [
+                      {
+                        'key': 'Organization',
+                        'value': data?.technicalContactOrganization,
+                      },
+                      {
+                        'key': 'State',
+                        'value': data?.technicalContactState,
+                      },
+                      {
+                        'key': 'Country',
+                        'value': data?.technicalContactCountry,
+                      },
+                      {
+                        'key': 'Country code',
+                        'value': data?.technicalContactCountryCode,
+                      },
+                    ],
+                  ),
 
-                _Card(
-                  title: 'Registrar',
-                  data: [
-                    {
-                      'key': 'Registrar Name',
-                      'value': data?.registrarName ?? ''
-                    },
-                    {
-                      'key': 'Registrar IANAID',
-                      'value': data?.registrarIANAID ?? ''
-                    },
-                  ],
-                ),
-                
-                _Card(
-                  title: 'Nameservers',
-                  data: data?.nameServers.map((e) => {
-                    'key': '',
-                    'value': e
-                  }).toList() ?? [],
-                ),
+                if (showRegistrar)
+                  _Card(
+                    title: 'Registrar',
+                    data: [
+                      {
+                        'key': 'Registrar Name',
+                        'value': data?.registrarName
+                      },
+                      {
+                        'key': 'Registrar IANAID',
+                        'value': data?.registrarIANAID
+                      },
+                    ],
+                  ),
+
+                if (showNameservers)
+                  _Card(
+                    title: 'Nameservers',
+                    data: data?.nameServers.map((e) => {
+                      'key': '',
+                      'value': e
+                    }).toList() ?? [],
+                  ),
               ],
             ),
           );
@@ -377,7 +432,7 @@ class _FloatingButton extends StatelessWidget {
 class _Card extends StatelessWidget {
   
   final String title;
-  final List<Map<String, String>> data;
+  final List<Map<String, String?>> data;
 
   const _Card({Key? key, required this.title, required this.data}) : super(key: key);
 
@@ -413,8 +468,13 @@ class _Card extends StatelessWidget {
               const SizedBox(height: 5),
 
               ...data.map((e) {
+
                 if (e['key']?.isNotEmpty == true) {
                   e['key'] = e['key']! + ': ';
+                }
+
+                if (e['value'] == null) {
+                  return Container();
                 }
 
                 return Padding(

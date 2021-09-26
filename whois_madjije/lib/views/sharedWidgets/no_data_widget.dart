@@ -21,18 +21,19 @@ class NoDataWidget extends StatelessWidget {
         children: [
           Positioned(
             left: 0,
+            right: 0,
             child: Icon(
               icon,
               color: Theme.of(context).primaryColor.withOpacity(0.15),
-              size: 300,
+              size: 650,
             ),
           ),
           Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 28,
-              color: Theme.of(context).primaryColor,
+              color: Colors.black54
             ),
           ),
         ],

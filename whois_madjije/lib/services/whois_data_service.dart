@@ -25,7 +25,7 @@ class WhoisDataService implements IWhoisDataService {
       '.net',
       '.uk',
       '.se',
-      '.io'
+      '.io',
       '.gov'
     ];
 
