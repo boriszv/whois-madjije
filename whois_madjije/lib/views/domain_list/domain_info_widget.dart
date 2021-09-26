@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../app_localizations.dart';
 
-class DomainInfo extends StatelessWidget {
+class DomainInfo extends StatefulWidget {
   final String domainName;
   final bool isRegistered;
   final IconData icon;
@@ -25,6 +27,31 @@ class DomainInfo extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DomainInfo> createState() => _DomainInfoState();
+}
+
+class _DomainInfoState extends State<DomainInfo> {
+  StreamSubscription? subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    subscription = Stream.periodic(const Duration(seconds: 59)).listen((event) {
+      setState(() {
+        // REBUILD
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    subscription?.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
 
@@ -32,7 +59,7 @@ class DomainInfo extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: InkWell(
         onTap: () {
-          onCardPressed();
+          widget.onCardPressed();
         },
         child: Ink(
           decoration: BoxDecoration(
@@ -62,24 +89,24 @@ class DomainInfo extends StatelessWidget {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: Text(
-                            domainName,
+                            widget.domainName,
                             style: const TextStyle(fontSize: 22),
                             maxLines: 2,
                           ),
                         ),
-                        if (date != null)
+                        if (widget.date != null)
                           Column(
                             children: [
                               const SizedBox(height: 8),
                               _showIconWithText(
                                 Icons.event,
                                 Theme.of(context).primaryColor,
-                                'Pre 2 minuta',
+                                _getFormattedTime(widget.date!, translations),
                               ),
                             ],
                           ),
                         const SizedBox(height: 8),
-                        if (isRegistered)
+                        if (widget.isRegistered)
                           _showIconWithText(
                             Icons.check,
                             const Color.fromRGBO(56, 214, 0, 1),
@@ -95,19 +122,21 @@ class DomainInfo extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (iconOnPressed != null) iconOnPressed!();
+                        if (widget.iconOnPressed != null)
+                          widget.iconOnPressed!();
                       },
                       icon: Icon(
-                        icon,
+                        widget.icon,
                         size: 32,
-                        color: iconColor,
+                        color: widget.iconColor,
                       ),
                     ),
                   ],
                 ),
 
                 // HISTORY ICON
-                if (isHistoryIconShown != null && isHistoryIconShown == true)
+                if (widget.isHistoryIconShown != null &&
+                    widget.isHistoryIconShown == true)
                   Positioned(
                     right: 45,
                     bottom: 12,
@@ -144,5 +173,31 @@ class DomainInfo extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String _getFormattedTime(DateTime date, AppLocalizations translations) {
+    var todaysDate = DateTime.now();
+
+    Duration difference = todaysDate.difference(date);
+
+    if (difference.inDays != 0) {
+      var word = 'dan' + (difference.inDays > 1 ? 'a' : '');
+      return '${translations.translate('Pre')} ${difference.inDays.toString()} ${translations.translate(word)}';
+    } else if (difference.inHours != 0) {
+      var char;
+      if (difference.inHours == 1)
+        char = '';
+      else if (difference.inHours > 1 == difference.inHours <= 4)
+        char = 'a';
+      else
+        char = 'i';
+
+      return '${translations.translate('Pre')} ${difference.inHours.toString()} ${translations.translate('Sat' + char)}';
+    } else if (difference.inMinutes != 0) {
+      var word = 'minut' + (difference.inMinutes > 1 ? 'a' : '');
+      return '${translations.translate('Pre')} ${difference.inMinutes.toString()} ${translations.translate(word)}';
+    } else {
+      return translations.translate('Pre par momenata');
+    }
   }
 }
