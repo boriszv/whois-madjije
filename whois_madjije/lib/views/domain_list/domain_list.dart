@@ -62,7 +62,8 @@ class _DomainListState extends State<DomainList> {
                   onCardPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => DomainDetail(
-                            domain: domainAvailabilityList[itemIndex].domainName)));
+                            domain:
+                                domainAvailabilityList[itemIndex].domainName)));
                   },
                 )
               : LoadingIndicator(isLoading: isLoading);
