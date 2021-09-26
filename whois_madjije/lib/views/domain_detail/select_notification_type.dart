@@ -5,7 +5,6 @@ import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/views/settings/settings_email.dart';
 
 class SelectNotificationType extends StatefulWidget {
-
   @override
   State<SelectNotificationType> createState() => _SelectNotificationTypeState();
 }
@@ -34,7 +33,31 @@ class _SelectNotificationTypeState extends State<SelectNotificationType> {
       actions: [
         TextButton(
           child: const Text('Ok'),
-          onPressed: () {
+          onPressed: () async {
+            if (notificationSettings?.email == null ||
+                notificationSettings?.email == '') {
+              await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  actions: [
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [Text('Morate uneti email adresu')],
+                  ),
+                ),
+              );
+
+              return;
+            }
             Navigator.of(context).pop(notificationType);
           },
         ),
@@ -45,65 +68,71 @@ class _SelectNotificationTypeState extends State<SelectNotificationType> {
         children: [
           Row(
             children: [
-              Icon(Icons.notifications, color: Theme.of(context).primaryColor, size: 28,),
-
+              Icon(
+                Icons.notifications,
+                color: Theme.of(context).primaryColor,
+                size: 28,
+              ),
               const SizedBox(width: 15),
-
-              Text(translations.translate('Obavestenja'), style: Theme.of(context).textTheme.headline5?.apply(
-                fontWeightDelta: 1,
-                fontSizeDelta: -2
-              )),
+              Text(translations.translate('Obavestenja'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline5
+                      ?.apply(fontWeightDelta: 1, fontSizeDelta: -2)),
             ],
           ),
-
           const SizedBox(height: 15),
-
           ListTile(
             title: const Text('Email'),
             subtitle: notificationSettings?.email != null
-              ? Text(notificationSettings!.email!)
-              : null,
-
+                ? Text(notificationSettings!.email!)
+                : null,
             contentPadding: const EdgeInsets.all(0),
             leading: Radio<NotificationType?>(
               value: NotificationType.email,
               groupValue: notificationType,
-              onChanged: (value) {  
+              onChanged: (value) {
                 setState(() {
                   notificationType = value!;
                 });
               },
-            ),  
+            ),
             onTap: () {
               setState(() {
                 notificationType = NotificationType.email;
               });
             },
-            trailing: notificationType == NotificationType.email ? IconButton(
-              icon: const Icon(Icons.edit, size: 19,),
-              onPressed: () async {
-                final email = await showDialog(
-                  context: context,
-                  builder: (_) => SettingsEmail(
-                    email: notificationSettings?.email,
-                  ),
-                );
-                if (email == null || email == '') {
-                  return;
-                }
+            trailing: notificationType == NotificationType.email
+                ? IconButton(
+                    icon: const Icon(
+                      Icons.edit,
+                      size: 19,
+                    ),
+                    onPressed: () async {
+                      final email = await showDialog(
+                        context: context,
+                        builder: (_) => SettingsEmail(
+                          email: notificationSettings?.email,
+                        ),
+                      );
+                      if (email == null || email == '') {
+                        return;
+                      }
 
-                notificationSettings ??= NotificationSettings(type: NotificationType.push);
-                notificationSettings!.email = email;
+                      notificationSettings ??=
+                          NotificationSettings(type: NotificationType.push);
+                      notificationSettings!.email = email;
 
-                await settingsService.setNotificationSettings(notificationSettings!);
+                      await settingsService
+                          .setNotificationSettings(notificationSettings!);
 
-                setState(() {
-                  notificationSettings!.email = email;
-                });
-              },
-            ) : null,
+                      setState(() {
+                        notificationSettings!.email = email;
+                      });
+                    },
+                  )
+                : null,
           ),
-        
           ListTile(
             title: const Text('Push'),
             // subtitle: Text('guwop@atlantic.com'),
@@ -111,12 +140,12 @@ class _SelectNotificationTypeState extends State<SelectNotificationType> {
             leading: Radio<NotificationType?>(
               value: NotificationType.push,
               groupValue: notificationType,
-              onChanged: (value) {  
+              onChanged: (value) {
                 setState(() {
                   notificationType = value!;
                 });
               },
-            ),  
+            ),
             onTap: () {
               setState(() {
                 notificationType = NotificationType.push;
@@ -130,16 +159,15 @@ class _SelectNotificationTypeState extends State<SelectNotificationType> {
 }
 
 class _Card extends StatelessWidget {
-
   final IconData icon;
   final String title;
   final Widget child;
 
-  const _Card({Key? key, 
-    required this.title, 
+  const _Card({
+    Key? key,
+    required this.title,
     required this.icon,
     required this.child,
-
   }) : super(key: key);
 
   @override
@@ -147,7 +175,8 @@ class _Card extends StatelessWidget {
     final translations = AppLocalizations.of(context);
 
     return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15, bottom: 10),
+      padding:
+          const EdgeInsets.only(left: 15.0, right: 15, top: 15, bottom: 10),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -163,28 +192,29 @@ class _Card extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 15),
+          padding:
+              const EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(icon, color: Theme.of(context).primaryColor,
-                    size: 28,),
-
+                  Icon(
+                    icon,
+                    color: Theme.of(context).primaryColor,
+                    size: 28,
+                  ),
                   const SizedBox(width: 15),
-
-                  Text(translations.translate(title), style: Theme.of(context).textTheme.headline5?.apply(
-                    fontWeightDelta: 1,
-                    fontSizeDelta: -2
-                  )),
+                  Text(translations.translate(title),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.apply(fontWeightDelta: 1, fontSizeDelta: -2)),
                 ],
               ),
-
               const Divider(
                 color: Colors.black54,
               ),
-
               child,
             ],
           ),
