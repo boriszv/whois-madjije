@@ -4,13 +4,15 @@ class WhoisNotification {
   final String domain;
   final String expirationDateTime;
   final String status;
+  final String email;
 
   WhoisNotification({
     required this.type,
     required this.deviceToken,
     required this.domain,
     required this.expirationDateTime,
-    required this.status});
+    required this.status,
+    required this.email});
 
   factory WhoisNotification.fromJson(Map<String, dynamic> map) {
     return WhoisNotification(
@@ -19,6 +21,7 @@ class WhoisNotification {
       domain: map['domain'],
       expirationDateTime: map['expirationDateTime'],
       status: map['status'],
+      email: map['email'],
     );
   }
 }

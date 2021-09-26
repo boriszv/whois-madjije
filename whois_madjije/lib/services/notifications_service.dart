@@ -23,6 +23,7 @@ class NotificationsService implements INotificationsService {
         if (data.status == 'cancelled') {
           return null;
         }
+        return data;
       }
     }
 
@@ -34,6 +35,7 @@ class NotificationsService implements INotificationsService {
         if (data.status == 'cancelled') {
           return null;
         }
+        return data;
       }
     }
 

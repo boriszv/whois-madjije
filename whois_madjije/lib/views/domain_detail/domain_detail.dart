@@ -140,6 +140,7 @@ class _DomainDetailState extends State<DomainDetail> {
           domain: widget.domain,
           expirationDateTime: dateTime.toIso8601String(),
           status: 'queued',
+          email: (await settingsService.getEmailForNotifications()) ?? '',
           type: notificationType == NotificationType.push
               ? 'push'
               : 'email'));
