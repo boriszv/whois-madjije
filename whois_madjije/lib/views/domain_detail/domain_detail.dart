@@ -195,9 +195,9 @@ class _DomainDetailState extends State<DomainDetail> {
   void _setUpVisiblity() {
     showGeneralInfo = _determineVisiblity([
       data?.domainName,
-      data?.createdDate,
-      data?.updatedDate,
-      data?.expiresDate,
+      _formatDate(data?.createdDate),
+      _formatDate(data?.updatedDate),
+      _formatDate(data?.expiresDate),
     ]);
 
     showRegistrant = _determineVisiblity([
@@ -411,6 +411,19 @@ class _DomainDetailState extends State<DomainDetail> {
             );
           },
         ));
+  }
+
+  String? _formatDate(String? dateTime) {
+    if (dateTime == null) {
+      return null;
+    }
+
+    final date = DateTime.tryParse(dateTime);
+    if (date == null) {
+      return dateTime;
+    }
+
+    return '${date.day}/${date.month}/${date.year}';
   }
 }
 
