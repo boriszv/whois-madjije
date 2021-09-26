@@ -4,12 +4,12 @@ enum NotificationType {
 }
 
 class NotificationSettings {
-  final NotificationType type;
-  final String? email;
+  NotificationType type;
+  String? email;
 
   NotificationSettings({
     required this.type,
-    required this.email});
+    this.email});
 }
 
 abstract class ISettingsService {

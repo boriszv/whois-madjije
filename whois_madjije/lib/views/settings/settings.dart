@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/app_localizations.dart';
 import 'package:whois_madjije/services/isettings_service.dart';
+import 'package:whois_madjije/views/settings/settings_email.dart';
 
 class Settings extends StatefulWidget {
 
@@ -37,6 +38,17 @@ class _SettingsState extends State<Settings> {
     await settingsService.setLanguage(language);
     setState(() {
       this.language = language;
+    });
+  }
+
+  void _updateNotificatonType(NotificationType notificationType) async {
+    notificationSettings ??= NotificationSettings(type: notificationType);
+
+    notificationSettings?.type = notificationType;
+    await settingsService.setNotificationSettings(notificationSettings!);
+
+    setState(() {
+      notificationSettings?.type = notificationType;
     });
   }
 
@@ -76,7 +88,68 @@ class _SettingsState extends State<Settings> {
           _Card(
             title: 'Obavestenja',
             icon: Icons.notifications,
-            child: Container(),
+            child: Column(
+              children: [
+                
+                ListTile(
+                  title: const Text('Email'),
+                  subtitle: notificationSettings?.email != null
+                    ? Text(notificationSettings!.email!)
+                    : Container(),
+
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: Radio<NotificationType?>(
+                    value: NotificationType.email,
+                    groupValue: notificationSettings?.type,
+                    onChanged: (value) {  
+                      _updateNotificatonType(value!);
+                    },
+                  ),  
+                  onTap: () {
+                    _updateNotificatonType(NotificationType.email);
+                  },
+                  trailing: notificationSettings?.type == NotificationType.email ? IconButton(
+                    icon: const Icon(Icons.edit, size: 19,),
+                    onPressed: () async {
+                      final email = await showDialog(
+                        context: context,
+                        builder: (_) => SettingsEmail(
+                          email: notificationSettings?.email,
+                        ),
+                      );
+                      if (email == null || email == '') {
+                        return;
+                      }
+
+                      notificationSettings ??= NotificationSettings(type: NotificationType.push);
+                      notificationSettings!.email = email;
+
+                      await settingsService.setNotificationSettings(notificationSettings!);
+
+                      setState(() {
+                        notificationSettings!.email = email;
+                      });
+                    },
+                  ) : null,
+                ),
+              
+                ListTile(
+                  title: const Text('Push'),
+                  // subtitle: Text('guwop@atlantic.com'),
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: Radio<NotificationType?>(
+                    value: NotificationType.push,
+                    groupValue: notificationSettings?.type,
+                    onChanged: (value) {  
+                      _updateNotificatonType(value!);
+                    },
+                  ),  
+                  onTap: () {
+                    _updateNotificatonType(NotificationType.push);
+                  },
+                ),
+              ],
+            ),
           ),
           // _Card(
           //   title: 'Tamni mod',

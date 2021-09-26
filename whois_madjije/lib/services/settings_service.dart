@@ -40,7 +40,7 @@ class SettingsService implements ISettingsService {
     final settings = json.decode(data);
     return NotificationSettings(
       email: settings['email'],
-      type: settings['type'],
+      type: NotificationType.values[settings['type']],
     );
   }
 
@@ -48,6 +48,6 @@ class SettingsService implements ISettingsService {
   Future<void> setNotificationSettings(NotificationSettings settings)
     async => (await SharedPreferences.getInstance()).setString('notification_settings', json.encode({
       'email': settings.email,
-      'type': settings.type,
+      'type': settings.type.index,
     }));
 }
