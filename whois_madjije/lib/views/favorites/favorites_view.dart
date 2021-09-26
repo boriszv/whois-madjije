@@ -85,7 +85,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                       domainName: favoriteList[itemIndex].domainName,
                       isRegistered: favoriteList[itemIndex].registered,
                       icon: Icons.star,
-                      iconColor: Colors.yellow,
+                      iconColor: Colors.yellow[700]!,
                       date: favoriteList[itemIndex].dateTime,
                       onCardPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
