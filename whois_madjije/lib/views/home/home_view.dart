@@ -96,6 +96,28 @@ class HomeView extends StatelessWidget {
                   style: _searchButtonStyle(context),
                 ),
               ),
+
+              const SizedBox(height: 15),
+
+              SizedBox(
+                height: 50,
+                width: 130,
+                child: ElevatedButton(
+                  onPressed: () {
+                    onSearchClick(context);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.menu),
+                      const SizedBox(width: 5),
+                      Text(translations.translate('Opcije')),
+                    ],
+                  ),
+                  style: _optionsStyle(context),
+                ),
+              ),
             ],
           ),
         ),
@@ -115,6 +137,27 @@ class HomeView extends StatelessWidget {
         ),
         backgroundColor: MaterialStateProperty.all(
           Theme.of(context).primaryColor,
+        ),
+        textStyle: MaterialStateProperty.all(
+          const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ));
+  }
+  
+  ButtonStyle _optionsStyle(BuildContext context) {
+    return ButtonStyle(
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        foregroundColor: MaterialStateProperty.all(
+          Theme.of(context).primaryColor,
+        ),
+        backgroundColor: MaterialStateProperty.all(
+          Colors.white
         ),
         textStyle: MaterialStateProperty.all(
           const TextStyle(
