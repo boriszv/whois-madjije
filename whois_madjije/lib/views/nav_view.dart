@@ -37,8 +37,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final translations = AppLocalizations.of(context);
 
-    return Scaffold(
-      body: WillPopScope(
+    return WillPopScope(
         onWillPop: null,
         child: Scaffold(
           bottomNavigationBar: Container(
@@ -126,7 +125,6 @@ class _HomeState extends State<Home> {
             index: _index,
           ),
         ),
-      ),
-    );
+      );
   }
 }
