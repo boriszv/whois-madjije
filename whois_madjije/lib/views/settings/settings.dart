@@ -36,6 +36,8 @@ class _SettingsState extends State<Settings> {
 
   void _updateLanguage(String language) async {
     await settingsService.setLanguage(language);
+
+    AppLocalizations.of(context).load(locale: Locale(language));
     setState(() {
       this.language = language;
     });
@@ -75,13 +77,13 @@ class _SettingsState extends State<Settings> {
                 _Radio(
                   groupValue: language,
                   onChange: _updateLanguage,
-                  value: 'sr',
+                  value: 'sr-sp',
                   label: translations.translate('Cirilica'),
                 ),
                 _Radio(
                   groupValue: language,
                   onChange: _updateLanguage,
-                  value: 'sr-sp',
+                  value: 'sr',
                   label: translations.translate('Latinica'),
                 ),
               ],
