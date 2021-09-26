@@ -241,6 +241,7 @@ class _DomainDetailState extends State<DomainDetail> {
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         textColor: Colors.white,
+        backgroundColor: Colors.grey,
         fontSize: 16.0);
   }
 
