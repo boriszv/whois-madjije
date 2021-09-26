@@ -80,7 +80,7 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 50),
               SizedBox(
                 height: 50,
-                width: 130,
+                width: 140,
                 child: ElevatedButton(
                   onPressed: () {
                     onSearchClick(context);
@@ -102,7 +102,7 @@ class HomeView extends StatelessWidget {
 
               SizedBox(
                 height: 50,
-                width: 130,
+                width: 140,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => DomainOptions()));
