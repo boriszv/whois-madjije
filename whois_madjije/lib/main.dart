@@ -62,7 +62,7 @@ class _AppState extends State<App> {
               ],
               supportedLocales: const [
                 Locale('en'),
-                Locale('es'),
+                Locale('sr'),
               ],
               localeResolutionCallback: (locale, supportedLocales) {
                 for (final item in supportedLocales) {
