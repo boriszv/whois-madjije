@@ -25,6 +25,8 @@ class WhoisDataService implements IWhoisDataService {
       '.net',
       '.uk',
       '.se',
+      '.io'
+      '.gov'
     ];
 
     final list = <DomainAvailability>[];
