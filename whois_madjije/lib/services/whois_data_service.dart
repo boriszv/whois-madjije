@@ -51,7 +51,9 @@ class WhoisDataService implements IWhoisDataService {
     }
 
     if (record['dataError'] == 'MISSING_WHOIS_DATA') {
-      await _addSearchRecod(domain, false);
+      if (writeToHistory) {
+        await _addSearchRecod(domain, false);
+      }
 
       return WhoisData.missingData();
     }

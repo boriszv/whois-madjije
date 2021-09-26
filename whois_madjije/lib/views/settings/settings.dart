@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:whois_madjije/app_localizations.dart';
 import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/views/settings/settings_email.dart';
+import 'package:whois_madjije/views/sharedWidgets/yes_no_dialog.dart';
 
 class Settings extends StatefulWidget {
 
@@ -36,14 +37,21 @@ class _SettingsState extends State<Settings> {
   }
 
   void _updateLanguage(String language) async {
+    final translations = AppLocalizations.of(context);
+
     await settingsService.setLanguage(language);
 
-    AppLocalizations.of(context).load(locale: Locale(language));
-    setState(() {
-      this.language = language;
-    });
+    await showDialog(context: context, builder: (context) => YesNoDialog(
+      onProceed: () {
+        AppLocalizations.of(context).load(locale: Locale(language));
+        setState(() {
+          this.language = language;
+        });
 
-    Phoenix.rebirth(context);
+        Phoenix.rebirth(context);
+      },
+      text: translations.translate('Ako promenite jezik aplikacija ce se resetovati'),
+    ));
   }
 
   void _updateNotificatonType(NotificationType notificationType) async {
