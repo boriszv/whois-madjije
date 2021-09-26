@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:whois_madjije/services/isearch_history_service.dart';
+import 'package:whois_madjije/services/isettings_service.dart';
 import 'package:whois_madjije/services/iwhois_api.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 
@@ -8,28 +9,13 @@ class WhoisDataService implements IWhoisDataService {
 
   final IWhoisApi _api;
   final ISearchHistoryService _searchHistory;
+  final ISettingsService _settings;
 
-  WhoisDataService(this._api, this._searchHistory);
+  WhoisDataService(this._api, this._searchHistory, this._settings);
 
   @override
   Stream<List<DomainAvailability>> getAvailabilityList(String domain) async* {
-    const domains = [
-      '.rs',
-      '.срб',
-      '.ru',
-      '.рф',
-      '.mk',
-      '.мкд',
-      '.org',
-      '.орг',
-      '.com',
-      '.ком',
-      '.net',
-      '.uk',
-      '.se',
-      '.io',
-      '.gov'
-    ];
+    final domains = await _settings.getSavedDomainsList();
 
     final list = <DomainAvailability>[];
     for (final domainName in domains) {

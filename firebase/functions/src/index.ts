@@ -104,12 +104,14 @@ const sendNotifications = async (context?: EventContext) => {
           if (!notification.email)
             continue;
 
+          const date = new Date(notification.expirationDateTime).toLocaleDateString();
+
           emailNotificationsToSend.push({
             to: notification.email,
             from: 'whois-madjije@prioritysoft.io',
             subject: `Upozorenje: domen ${notification.domain} je istekao`,
-            text: 'ripcic',
-            html: generateEmail(notification.domain, new Date(notification.expirationDateTime).toLocaleDateString()),
+            text: `Obaveštenje o isteku domena. Poštovani obaveštavamo Vas da je prioritysoft.rs domen istekao, ukoliko želite da obnovite domen molimo Vas odgovorite nam na ovaj mejl... Datum isteka ${date}`,
+            html: generateEmail(notification.domain, date),
 
           } as MailDataRequired);
 

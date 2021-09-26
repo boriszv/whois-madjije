@@ -89,73 +89,73 @@ class _SettingsState extends State<Settings> {
               ],
             ),
           ),
-          _Card(
-            title: 'Obavestenja',
-            icon: Icons.notifications,
-            child: Column(
-              children: [
-                
-                ListTile(
-                  title: const Text('Email'),
-                  subtitle: notificationSettings?.email != null
-                    ? Text(notificationSettings!.email!)
-                    : null,
-
-                  contentPadding: const EdgeInsets.all(0),
-                  leading: Radio<NotificationType?>(
-                    value: NotificationType.email,
-                    groupValue: notificationSettings?.type,
-                    onChanged: (value) {  
-                      _updateNotificatonType(value!);
-                    },
-                  ),  
-                  onTap: () {
-                    _updateNotificatonType(NotificationType.email);
-                  },
-                  trailing: notificationSettings?.type == NotificationType.email ? IconButton(
-                    icon: const Icon(Icons.edit, size: 19,),
-                    onPressed: () async {
-                      final email = await showDialog(
-                        context: context,
-                        builder: (_) => SettingsEmail(
-                          email: notificationSettings?.email,
-                        ),
-                      );
-                      if (email == null || email == '') {
-                        return;
-                      }
-
-                      notificationSettings ??= NotificationSettings(type: NotificationType.push);
-                      notificationSettings!.email = email;
-
-                      await settingsService.setNotificationSettings(notificationSettings!);
-
-                      setState(() {
-                        notificationSettings!.email = email;
-                      });
-                    },
-                  ) : null,
-                ),
-              
-                ListTile(
-                  title: const Text('Push'),
-                  // subtitle: Text('guwop@atlantic.com'),
-                  contentPadding: const EdgeInsets.all(0),
-                  leading: Radio<NotificationType?>(
-                    value: NotificationType.push,
-                    groupValue: notificationSettings?.type,
-                    onChanged: (value) {  
-                      _updateNotificatonType(value!);
-                    },
-                  ),  
-                  onTap: () {
-                    _updateNotificatonType(NotificationType.push);
-                  },
-                ),
-              ],
-            ),
-          ),
           // _Card(
+          //   title: 'Obavestenja',
+          //   icon: Icons.notifications,
+          //   child: Column(
+          //     children: [
+                
+          //       ListTile(
+          //         title: const Text('Email'),
+          //         subtitle: notificationSettings?.email != null
+          //           ? Text(notificationSettings!.email!)
+          //           : null,
+
+          //         contentPadding: const EdgeInsets.all(0),
+          //         leading: Radio<NotificationType?>(
+          //           value: NotificationType.email,
+          //           groupValue: notificationSettings?.type,
+          //           onChanged: (value) {  
+          //             _updateNotificatonType(value!);
+          //           },
+          //         ),  
+          //         onTap: () {
+          //           _updateNotificatonType(NotificationType.email);
+          //         },
+          //         trailing: notificationSettings?.type == NotificationType.email ? IconButton(
+          //           icon: const Icon(Icons.edit, size: 19,),
+          //           onPressed: () async {
+          //             final email = await showDialog(
+          //               context: context,
+          //               builder: (_) => SettingsEmail(
+          //                 email: notificationSettings?.email,
+          //               ),
+          //             );
+          //             if (email == null || email == '') {
+          //               return;
+          //             }
+
+          //             notificationSettings ??= NotificationSettings(type: NotificationType.push);
+          //             notificationSettings!.email = email;
+
+          //             await settingsService.setNotificationSettings(notificationSettings!);
+
+          //             setState(() {
+          //               notificationSettings!.email = email;
+          //             });
+          //           },
+          //         ) : null,
+          //       ),
+              
+          //       ListTile(
+          //         title: const Text('Push'),
+          //         // subtitle: Text('guwop@atlantic.com'),
+          //         contentPadding: const EdgeInsets.all(0),
+          //         leading: Radio<NotificationType?>(
+          //           value: NotificationType.push,
+          //           groupValue: notificationSettings?.type,
+          //           onChanged: (value) {  
+          //             _updateNotificatonType(value!);
+          //           },
+          //         ),  
+          //         onTap: () {
+          //           _updateNotificatonType(NotificationType.push);
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // // _Card(
           //   title: 'Tamni mod',
           //   icon: Icons.brightness_6,
           //   child: Container(),

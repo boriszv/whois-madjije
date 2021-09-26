@@ -55,7 +55,7 @@ class SettingsService implements ISettingsService {
   Future<List<String>> getSavedDomainsList() async {
     final data = (await SharedPreferences.getInstance()).getString('saved_domains');
     if (data == null || data.isEmpty) {
-      return defaultDomains;
+      return defaultDomains.map((x) => x).toList();
     }
 
     return (json.decode(data) as List<dynamic>).cast<String>();

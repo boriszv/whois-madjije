@@ -17,13 +17,14 @@ void setupDependencyInjection() {
   
   GetIt.I.registerLazySingleton<ISearchHistoryService>(() => SearchHistoryService());
 
+  GetIt.I.registerSingleton<ISettingsService>(SettingsService());
+
   GetIt.I.registerFactory<IWhoisDataService>(() =>
     WhoisDataService(
       GetIt.I<IWhoisApi>(),
       GetIt.I<ISearchHistoryService>(),
+      GetIt.I<ISettingsService>(),
     ));
-
-  GetIt.I.registerSingleton<ISettingsService>(SettingsService());
 
   GetIt.I.registerFactory<INotificationsService>(() =>
     NotificationsService(

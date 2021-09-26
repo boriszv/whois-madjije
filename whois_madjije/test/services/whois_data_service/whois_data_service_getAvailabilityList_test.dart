@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:whois_madjije/services/iwhois_api.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 import 'package:whois_madjije/services/search_history_service.dart';
+import 'package:whois_madjije/services/settings_service.dart';
 import 'package:whois_madjije/services/whois_data_service.dart';
 
 import 'domain_data.dart';
@@ -22,7 +23,7 @@ void main() {
       when(api.getIps(any))
         .thenAnswer((_) async => []);
 
-      final service = WhoisDataService(api, SearchHistoryService());
+      final service = WhoisDataService(api, SearchHistoryService(), SettingsService());
 
       final stream = service.getAvailabilityList('testdomen');
       await stream.last;

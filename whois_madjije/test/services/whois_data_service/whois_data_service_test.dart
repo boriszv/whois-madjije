@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:whois_madjije/services/iwhois_api.dart';
 import 'package:whois_madjije/services/iwhois_data_service.dart';
 import 'package:whois_madjije/services/search_history_service.dart';
+import 'package:whois_madjije/services/settings_service.dart';
 import 'package:whois_madjije/services/whois_data_service.dart';
 
 import 'domain_data.dart';
@@ -22,7 +23,7 @@ void main() {
       when(api.getIps(any))
         .thenAnswer((_) async => []);
 
-      final service = WhoisDataService(api, SearchHistoryService());
+      final service = WhoisDataService(api, SearchHistoryService(), SettingsService());
 
       final result = await service.getWhoisData('google.com');
       expect(result.exists, true);
@@ -57,7 +58,7 @@ void main() {
       when(api.getIps(any))
         .thenAnswer((_) async => []);
 
-      final service = WhoisDataService(api, SearchHistoryService());
+      final service = WhoisDataService(api, SearchHistoryService(), SettingsService());
 
       final result = await service.getWhoisData('гугл.мкд');
 
@@ -89,7 +90,7 @@ void main() {
       when(api.getIps(any))
         .thenAnswer((_) async => []);
 
-      final service = WhoisDataService(api, SearchHistoryService());
+      final service = WhoisDataService(api, SearchHistoryService(), SettingsService());
 
       final result = await service.getWhoisData('randomdomain.com');
 
@@ -105,7 +106,7 @@ void main() {
       when(api.getIps(any))
         .thenAnswer((_) async => []);
 
-      final service = WhoisDataService(api, SearchHistoryService());
+      final service = WhoisDataService(api, SearchHistoryService(), SettingsService());
 
       final result = await service.getWhoisData('invalid domain');
 
@@ -121,7 +122,7 @@ void main() {
       when(api.getIps(any))
         .thenAnswer((_) async => []);
 
-      final service = WhoisDataService(api, SearchHistoryService());
+      final service = WhoisDataService(api, SearchHistoryService(), SettingsService());
 
       final result = await service.getWhoisData('invalid domain');
 
